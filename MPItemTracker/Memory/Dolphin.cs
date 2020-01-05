@@ -210,111 +210,114 @@ namespace Prime.Memory
 
         internal static void DrawUpgradeIcon(Graphics g, Size windowSize, String upgrade_title)
         {
+            int center_x = windowSize.Width / 2;
             int imgSize = (int)((float)windowSize.Width * 0.0442906581f);
-            if(upgrade_title == "Missiles")
+            if (imgSize > 64)
+                imgSize = 64;
+            if (upgrade_title == "Missiles")
             {
                 if(MetroidPrime.HaveMissiles)
-                    g.DrawImage(img[upgrade_title], 25, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 10, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Morph Ball")
             {
                 if (MetroidPrime.HaveMorphBall)
-                    g.DrawImage(img[upgrade_title], 25 + imgSize, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 9, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Morph Ball Bombs")
             {
                 if (MetroidPrime.HaveMorphBallBombs)
-                    g.DrawImage(img[upgrade_title], 35 + imgSize * 2, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 8, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Power Bombs")
             {
                 if (MetroidPrime.HavePowerBombs)
-                    g.DrawImage(img[upgrade_title], 45 + imgSize * 3, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 7, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Boost Ball")
             {
                 if (MetroidPrime.HaveBoostBall)
-                    g.DrawImage(img[upgrade_title], 55 + imgSize * 4, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 6, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Spider Ball")
             {
                 if (MetroidPrime.HaveSpiderBall)
-                    g.DrawImage(img[upgrade_title], 65 + imgSize * 5, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 5, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Space Jump Boots")
             {
                 if (MetroidPrime.HaveSpaceJumpBoots)
-                    g.DrawImage(img[upgrade_title], 65 + imgSize * 6, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 4, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Varia Suit")
             {
                 if (MetroidPrime.HaveVariaSuit)
-                    g.DrawImage(img[upgrade_title], 65 + imgSize * 7, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 3, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Gravity Suit")
             {
                 if (MetroidPrime.HaveGravitySuit)
-                    g.DrawImage(img[upgrade_title], 70 + imgSize * 8, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 2, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Phazon Suit")
             {
                 if (MetroidPrime.HavePhazonSuit)
-                    g.DrawImage(img[upgrade_title], 75 + imgSize * 9, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5), 5, imgSize, imgSize);
             }
             if (upgrade_title == "Wave Beam")
             {
                 if (MetroidPrime.HaveWaveBeam)
-                    g.DrawImage(img[upgrade_title], 75 + imgSize * 10, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Ice Beam")
             {
                 if (MetroidPrime.HaveIceBeam)
-                    g.DrawImage(img[upgrade_title], 70 + imgSize * 11, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5), 5, imgSize, imgSize);
             }
             if (upgrade_title == "Plasma Beam")
             {
                 if (MetroidPrime.HavePlasmaBeam)
-                    g.DrawImage(img[upgrade_title], 65 + imgSize * 12, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 2, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Charge Beam")
             {
                 if (MetroidPrime.HaveChargeBeam)
-                    g.DrawImage(img[upgrade_title], 65 + imgSize * 13, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 3, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Grapple Beam")
             {
                 if (MetroidPrime.HaveGrappleBeam)
-                    g.DrawImage(img[upgrade_title], 65 + imgSize * 14, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 4, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Super Missile")
             {
                 if (MetroidPrime.HaveSuperMissile)
-                    g.DrawImage(img[upgrade_title], 65 + imgSize * 15, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 5, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Wavebuster")
             {
                 if (MetroidPrime.HaveWavebuster)
-                    g.DrawImage(img[upgrade_title], 55 + imgSize * 16, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 6, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Ice Spreader")
             {
                 if (MetroidPrime.HaveIceSpreader)
-                    g.DrawImage(img[upgrade_title], 45 + imgSize * 17, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 7, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Flamethrower")
             {
                 if (MetroidPrime.HaveFlamethrower)
-                    g.DrawImage(img[upgrade_title], 35 + imgSize * 18, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 8, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Thermal Visor")
             {
                 if (MetroidPrime.HaveThermalVisor)
-                    g.DrawImage(img[upgrade_title], 30 + imgSize * 19, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 9, 5, imgSize, imgSize);
             }
             if (upgrade_title == "XRay Visor")
             {
                 if (MetroidPrime.HaveXRayVisor)
-                    g.DrawImage(img[upgrade_title], 40 + imgSize * 20, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 10 + 10, 5, imgSize, imgSize);
             }
         }
 

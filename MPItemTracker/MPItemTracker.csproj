@@ -95,6 +95,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy ..\..\img %25CD%25\img /Y /S</PostBuildEvent>
+    <PostBuildEvent>copy ..\..\img\* .\img\* /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
