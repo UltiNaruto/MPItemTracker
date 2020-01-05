@@ -53,7 +53,6 @@
 
         internal abstract long CGameState { get; }
         internal abstract long CPlayerState { get; }
-        internal abstract long CWorld { get; }
         internal abstract long IGT { get; }
         internal abstract string IGTAsStr { get; }
 

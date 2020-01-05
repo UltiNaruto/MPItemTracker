@@ -38,17 +38,6 @@ namespace Prime.Memory.Constants
             }
         }
 
-        internal override long CWorld
-        {
-            get
-            {
-                long result = Dolphin.ReadUInt32(GC.RAMBaseAddress + OFF_CSTATEMANAGER + OFF_CWORLD);
-                if (result < GC.RAMBaseAddress)
-                    return -1;
-                return result;
-            }
-        }
-
         internal override long IGT
         {
             get

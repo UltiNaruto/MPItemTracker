@@ -35,6 +35,14 @@ namespace Prime.Memory
             }
         }
 
+        public static int GameVersion
+        {
+            get
+            {
+                return (int)Utils.ReadUInt8(dolphin, RAMBaseAddr + 7);
+            }
+        }
+
         private static bool IsValidGameCode(String s, int i=0)
         {
             if (s == "") return false;
@@ -139,8 +147,13 @@ namespace Prime.Memory
         internal static void InitMP()
         {
             MetroidPrime = null;
-            if(GameCode[3] == 'E')
-                MetroidPrime = new MP1_NTSC_1_00();
+            if (GameCode[3] == 'E')
+            {
+                if(GameVersion == 0)
+                    MetroidPrime = new MP1_NTSC_1_00();
+                if (GameVersion == 2)
+                    MetroidPrime = new MP1_NTSC_1_02();
+            }
             if (GameCode[3] == 'P')
                 MetroidPrime = new MP1_PAL();
         }
@@ -179,7 +192,7 @@ namespace Prime.Memory
         internal static void UpdateTracker(Graphics g)
         {
             KeyValuePair<Point, Size> gameWindowPosAndSize = Dolphin.GetDolphinGameWindowPosAndSize();
-            if (MetroidPrime.CWorld == -1)
+            if (MetroidPrime.CGameState == -1)
                 return;
             DrawIGT(g, gameWindowPosAndSize.Value);
             foreach(KeyValuePair<String, Image> kvp in img)
@@ -189,7 +202,7 @@ namespace Prime.Memory
         internal static void UpdateTrackerInfo(MPItemTracker.Form1 form)
         {
             KeyValuePair<Point, Size> gameWindowPosAndSize = Dolphin.GetDolphinGameWindowPosAndSize();
-            if (MetroidPrime.CWorld == -1)
+            if (MetroidPrime.CGameState == -1)
                 return;
             form.SetWindowPosAndSize(new Point(0, 0), gameWindowPosAndSize.Value);
         }

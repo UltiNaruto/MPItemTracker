@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Prime.Memory.Constants
 {
-    internal class MP1_PAL : _MP1
+    internal class MP1_NTSC_1_02 : _MP1
     {
-        internal const long OFF_CGAMEGLOBALOBJECTS = 0x3DF678;
+        internal const long OFF_CGAMEGLOBALOBJECTS = 0x4587F8;
         internal const long OFF_CGAMESTATE = OFF_CGAMEGLOBALOBJECTS + 0x134;
-        internal const long OFF_CSTATEMANAGER = 0x3E2088;
-        internal const long OFF_MORPHBALLBOMBS_COUNT = 0x3DFBFB;
+        internal const long OFF_CSTATEMANAGER = 0x45B208;
+        internal const long OFF_MORPHBALLBOMBS_COUNT = 0x458D7B;
 
         internal override long CGameState
         {
