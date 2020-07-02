@@ -59,7 +59,6 @@ namespace MPItemTracker
                 }
                 if (emuInit && gameInit && formInit)
                 {
-                    e.Graphics.Clear(this.TransparencyKey);
                     Dolphin.UpdateTracker(e.Graphics);
                 }
             }
@@ -101,7 +100,7 @@ namespace MPItemTracker
                         SafeClose();
                         break;
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                 }
             };
         }

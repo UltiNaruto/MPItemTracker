@@ -39,7 +39,7 @@ namespace Prime.Memory
         {
             get
             {
-                return (int)Utils.ReadUInt8(dolphin, RAMBaseAddr + 7);
+                return (int)Utils.Read(dolphin, RAMBaseAddr + 7, 1)[0];
             }
         }
 
@@ -181,6 +181,7 @@ namespace Prime.Memory
             img.Add("Flamethrower", Image.FromFile(@"img\flamethrower.png"));
             img.Add("Thermal Visor", Image.FromFile(@"img\thermalvisor.png"));
             img.Add("XRay Visor", Image.FromFile(@"img\xrayvisor.png"));
+            img.Add("Artifacts", Image.FromFile(@"img\artifacts.png"));
             form.Hide();
             form.FormBorderStyle = FormBorderStyle.None;
             form.BackColor = form.TransparencyKey;
@@ -195,7 +196,7 @@ namespace Prime.Memory
             if (MetroidPrime.CGameState == -1)
                 return;
             DrawIGT(g, gameWindowPosAndSize.Value);
-            foreach(KeyValuePair<String, Image> kvp in img)
+            foreach (KeyValuePair<String, Image> kvp in img)
                 DrawUpgradeIcon(g, gameWindowPosAndSize.Value, kvp.Key);
         }
 
@@ -223,249 +224,286 @@ namespace Prime.Memory
 
         internal static void DrawUpgradeIcon(Graphics g, Size windowSize, String upgrade_title)
         {
-            int center_x = windowSize.Width / 2;
-            int imgSize = (int)((float)windowSize.Width * 0.0442906581f);
+            float ratio = (float)windowSize.Width / windowSize.Height;
+            int fontSize = (int)(15.7894735f * ratio * 0.5f);
+            Font _Font = new Font("Arial", fontSize);
+            String artifactText = "x";
+            int artifactCount = 0;
+            int imgSize = (int)((float)windowSize.Width * 0.0402906581f);
             if (imgSize > 64)
                 imgSize = 64;
+            int center_x = windowSize.Width / 2 + imgSize / 2;
             if (upgrade_title == "Missiles")
             {
                 if(MetroidPrime.HaveMissiles)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 10, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 11 + 10, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Morph Ball")
             {
                 if (MetroidPrime.HaveMorphBall)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 9, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 10, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Morph Ball Bombs")
             {
                 if (MetroidPrime.HaveMorphBallBombs)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 8, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 9, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Power Bombs")
             {
                 if (MetroidPrime.HavePowerBombs)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 7, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 8, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Boost Ball")
             {
                 if (MetroidPrime.HaveBoostBall)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 6, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 7, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Spider Ball")
             {
                 if (MetroidPrime.HaveSpiderBall)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 5, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 6, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Space Jump Boots")
             {
                 if (MetroidPrime.HaveSpaceJumpBoots)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 4, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 5, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Varia Suit")
             {
                 if (MetroidPrime.HaveVariaSuit)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 3, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 4, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Gravity Suit")
             {
                 if (MetroidPrime.HaveGravitySuit)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 2, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 3, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Phazon Suit")
             {
                 if (MetroidPrime.HavePhazonSuit)
-                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5), 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5) * 2, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Wave Beam")
             {
                 if (MetroidPrime.HaveWaveBeam)
-                    g.DrawImage(img[upgrade_title], center_x, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x - (imgSize + 5), 5, imgSize, imgSize);
             }
             if (upgrade_title == "Ice Beam")
             {
                 if (MetroidPrime.HaveIceBeam)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5), 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Plasma Beam")
             {
                 if (MetroidPrime.HavePlasmaBeam)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 2, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5), 5, imgSize, imgSize);
             }
             if (upgrade_title == "Charge Beam")
             {
                 if (MetroidPrime.HaveChargeBeam)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 3, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 2, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Grapple Beam")
             {
                 if (MetroidPrime.HaveGrappleBeam)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 4, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 3, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Super Missile")
             {
                 if (MetroidPrime.HaveSuperMissile)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 5, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 4, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Wavebuster")
             {
                 if (MetroidPrime.HaveWavebuster)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 6, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 5, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Ice Spreader")
             {
                 if (MetroidPrime.HaveIceSpreader)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 7, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 6, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Flamethrower")
             {
                 if (MetroidPrime.HaveFlamethrower)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 8, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 7, 5, imgSize, imgSize);
             }
             if (upgrade_title == "Thermal Visor")
             {
                 if (MetroidPrime.HaveThermalVisor)
-                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 9, 5, imgSize, imgSize);
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 8, 5, imgSize, imgSize);
             }
             if (upgrade_title == "XRay Visor")
             {
                 if (MetroidPrime.HaveXRayVisor)
+                    g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 9 + 10, 5, imgSize, imgSize);
+            }
+
+            if (upgrade_title == "Artifacts")
+            {
+                for (int i = 0; i < 12; i++)
+                    if (MetroidPrime.Artifacts(i))
+                        artifactCount++;
+                if (artifactCount > 0)
+                {
+                    artifactText += artifactCount;
                     g.DrawImage(img[upgrade_title], center_x + (imgSize - 5) * 10 + 10, 5, imgSize, imgSize);
+                    g.DrawString(artifactText, _Font, Brushes.White, center_x + (imgSize - 5) * 10 + 10 + 0.75f * imgSize, 5 + imgSize);
+                }
             }
         }
 
-        internal static Byte[] Read(long gc_address, int size, bool BigEndian=false)
+        internal static Byte[] Read(long gc_address, int size, bool BigEndian = false)
         {
-            if (!IsRunning) return null;
-            long pc_address = RAMBaseAddr + (gc_address - Constants.GC.RAMBaseAddress);
-            byte[] datas = Utils.Read(dolphin, pc_address, size);
-            return BigEndian ? datas.Reverse().ToArray() : datas;
+            try
+            {
+                long pc_address = RAMBaseAddr + (gc_address - Constants.GC.RAMBaseAddress);
+                byte[] datas = Utils.Read(dolphin, pc_address, size);
+                return BigEndian ? datas.Reverse().ToArray() : datas;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         internal static Byte ReadUInt8(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return Read(gc_address, 1)[0];
+            byte[] datas = Read(gc_address, 1);
+            if (datas == null)
+                return 0;
+            return datas[0];
         }
 
         internal static UInt16 ReadUInt16(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return BitConverter.ToUInt16(Read(gc_address, 2, true), 0);
+            byte[] datas = Read(gc_address, 2, true);
+            if (datas == null)
+                return 0;
+            return BitConverter.ToUInt16(datas, 0);
         }
 
         internal static UInt32 ReadUInt32(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return BitConverter.ToUInt32(Read(gc_address, 4, true), 0);
+            byte[] datas = Read(gc_address, 4, true);
+            if (datas == null)
+                return 0;
+            return BitConverter.ToUInt32(datas, 0);
         }
 
         internal static UInt64 ReadUInt64(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return BitConverter.ToUInt64(Read(gc_address, 8, true), 0);
+            byte[] datas = Read(gc_address, 8, true);
+            if (datas == null)
+                return 0;
+            return BitConverter.ToUInt64(datas, 0);
         }
 
         internal static SByte ReadInt8(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return (SByte)Read(gc_address, 1)[0];
+            byte[] datas = Read(gc_address, 1);
+            if (datas == null)
+                return 0;
+            return (SByte)datas[0];
         }
 
         internal static Int16 ReadInt16(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return BitConverter.ToInt16(Read(gc_address, 2, true), 0);
+            byte[] datas = Read(gc_address, 2, true);
+            if (datas == null)
+                return 0;
+            return BitConverter.ToInt16(datas, 0);
         }
 
         internal static Int32 ReadInt32(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return BitConverter.ToInt32(Read(gc_address, 4, true), 0);
+            byte[] datas = Read(gc_address, 4, true);
+            if (datas == null)
+                return 0;
+            return BitConverter.ToInt32(datas, 0);
         }
 
         internal static Int64 ReadInt64(long gc_address)
         {
-            if (!IsRunning) return 0;
-            return BitConverter.ToInt64(Read(gc_address, 8, true), 0);
+            byte[] datas = Read(gc_address, 8, true);
+            if (datas == null)
+                return 0;
+            return BitConverter.ToInt64(datas, 0);
         }
 
         internal static Single ReadFloat32(long gc_address)
         {
-            if (!IsRunning) return Single.NaN;
-            return BitConverter.ToSingle(Read(gc_address, 4, true), 0);
+            byte[] datas = Read(gc_address, 4, true);
+            if (datas == null)
+                return Single.NaN;
+            return BitConverter.ToSingle(datas, 0);
         }
 
         internal static Double ReadFloat64(long gc_address)
         {
-            if (!IsRunning) return Double.NaN;
-            return BitConverter.ToDouble(Read(gc_address, 8, true), 0);
+            byte[] datas = Read(gc_address, 8, true);
+            if (datas == null)
+                return Double.NaN;
+            return BitConverter.ToDouble(datas, 0);
         }
 
-        internal static void Write(long gc_address, Byte[] datas, bool BigEndian=false)
+        internal static void Write(long gc_address, Byte[] datas, bool BigEndian = false)
         {
-            if (!IsRunning) return;
-            long pc_address = RAMBaseAddr + (gc_address - Constants.GC.RAMBaseAddress);
-            Utils.Write(dolphin, pc_address, BigEndian ? datas.Reverse().ToArray() : datas);
+            try
+            {
+                long pc_address = RAMBaseAddr + (gc_address - Constants.GC.RAMBaseAddress);
+                Utils.Write(dolphin, pc_address, BigEndian ? datas.Reverse().ToArray() : datas);
+            }
+            catch { }
         }
 
         internal static void WriteUInt8(long gc_address, Byte value)
         {
-            if (!IsRunning) return;
             Write(gc_address, new Byte[] { value });
         }
 
         internal static void WriteUInt16(long gc_address, UInt16 value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
 
         internal static void WriteUInt32(long gc_address, UInt32 value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
 
         internal static void WriteUInt64(long gc_address, UInt64 value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
 
         internal static void WriteInt8(long gc_address, SByte value)
         {
-            if (!IsRunning) return;
             Write(gc_address, new Byte[] { (Byte)value });
         }
 
         internal static void WriteInt16(long gc_address, Int16 value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
 
         internal static void WriteInt32(long gc_address, Int32 value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
 
         internal static void WriteInt64(long gc_address, Int64 value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
 
         internal static void WriteFloat32(long gc_address, Single value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
 
         internal static void WriteFloat64(long gc_address, Double value)
         {
-            if (!IsRunning) return;
             Write(gc_address, BitConverter.GetBytes(value), true);
         }
     }
