@@ -56,6 +56,9 @@
         internal abstract long IGT { get; }
         internal abstract string IGTAsStr { get; }
 
+        internal abstract int MaxMissiles { get; }
+        internal abstract int MaxPowerBombs { get; }
+
         internal abstract bool HaveIceBeam { get; }
         internal abstract bool HaveWaveBeam { get; }
         internal abstract bool HavePlasmaBeam { get; }

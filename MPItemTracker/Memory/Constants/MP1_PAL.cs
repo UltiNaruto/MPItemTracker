@@ -58,6 +58,26 @@ namespace Prime.Memory.Constants
             }
         }
 
+        internal override int MaxMissiles
+        {
+            get
+            {
+                if (CPlayerState == -1)
+                    return 0;
+                return Dolphin.ReadUInt8(CPlayerState + OFF_MAX_MISSILES);
+            }
+        }
+
+        internal override int MaxPowerBombs
+        {
+            get
+            {
+                if (CPlayerState == -1)
+                    return 0;
+                return Dolphin.ReadUInt8(CPlayerState + OFF_MAX_POWERBOMBS);
+            }
+        }
+
         internal override bool HaveIceBeam
         {
             get
@@ -92,9 +112,7 @@ namespace Prime.Memory.Constants
         {
             get
             {
-                if (CPlayerState == -1)
-                    return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_MAX_MISSILES) > 0;
+                return MaxMissiles > 0;
             }
         }
 
@@ -112,9 +130,7 @@ namespace Prime.Memory.Constants
         {
             get
             {
-                if (CPlayerState == -1)
-                    return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_MAX_POWERBOMBS) > 0;
+                return MaxPowerBombs > 0;
             }
         }
 
