@@ -195,9 +195,13 @@ namespace Prime.Memory
             KeyValuePair<Point, Size> gameWindowPosAndSize = Dolphin.GetDolphinGameWindowPosAndSize();
             if (MetroidPrime.CGameState == -1)
                 return;
-            DrawIGT(g, gameWindowPosAndSize.Value);
-            foreach (KeyValuePair<String, Image> kvp in img)
-                DrawUpgradeIcon(g, gameWindowPosAndSize.Value, kvp.Key);
+            if (Dolphin.MetroidPrime.IGT > 0)
+            {
+                DrawIGT(g, gameWindowPosAndSize.Value);
+                if(!MetroidPrime.IsSwitchingState)
+                    foreach (KeyValuePair<String, Image> kvp in img)
+                        DrawUpgradeIcon(g, gameWindowPosAndSize.Value, kvp.Key);
+            }
         }
 
         internal static void UpdateTrackerInfo(MPItemTracker.Form1 form)
@@ -367,10 +371,10 @@ namespace Prime.Memory
             if (!img.ContainsKey(upgrade_title))
                 return;
 
-            g.DrawImage(img[upgrade_title], x, 5, imgSize, imgSize);
+            g.DrawImage(img[upgrade_title], x, MetroidPrime.IsMorphed ? windowSize.Height - imgSize * 2 - 10 : 5, imgSize, imgSize);
 
             if(displayText != "x")
-                g.DrawString(displayText, _Font, Brushes.White, x + 0.6f * imgSize, 5 + imgSize);
+                g.DrawString(displayText, _Font, Brushes.White, x + 0.6f * imgSize, MetroidPrime.IsMorphed ? windowSize.Height - imgSize - 7 : 5 + imgSize);
         }
 
         internal static Byte[] Read(long gc_address, int size, bool BigEndian = false)

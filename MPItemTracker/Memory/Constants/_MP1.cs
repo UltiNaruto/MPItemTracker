@@ -3,6 +3,9 @@
     internal abstract class _MP1
     {
         internal const long OFF_PLAYTIME = 0xA0;
+        internal const long OFF_CPLAYER_MORPHSTATE = 0x68;
+        internal const long OFF_CPLAYER_SWITCHSTATE = 0xB4;
+        internal const long OFF_CPLAYER = 0x84C;
         internal const long OFF_CWORLD = 0x850;
         internal const long OFF_ROOM_ID = 0x68;
         internal const long OFF_WORLD_ID = 0x6C;
@@ -26,7 +29,7 @@
         internal const long OFF_GRAPPLEBEAM_OBTAINED = 0x8F;
         internal const long OFF_XRAYVISOR_OBTAINED = 0x97;
         internal const long OFF_ICESPREADER_OBTAINED = 0x9F;
-        internal const long OFF_SPACEJUMPBOOTS_OBTAINED = 0xA7;
+        internal const long OFF_SPACEJUMPBOOTS_OBTAINED = 0xA3;
         internal const long OFF_MORPHBALL_OBTAINED = 0xAF;
         internal const long OFF_COMBATVISOR_OBTAINED = 0xB7;
         internal const long OFF_BOOSTBALL_OBTAINED = 0xBF;
@@ -51,10 +54,14 @@
         internal const long OFF_ARTIFACT_OF_SPIRIT_OBTAINED = 0x167;
         internal const long OFF_ARTIFACT_OF_NEWBORN_OBTAINED = 0x16F;
 
+        internal abstract long CPlayer { get; }
         internal abstract long CGameState { get; }
         internal abstract long CPlayerState { get; }
         internal abstract long IGT { get; }
         internal abstract string IGTAsStr { get; }
+
+        internal abstract bool IsMorphed { get; }
+        internal abstract bool IsSwitchingState { get; }
 
         internal abstract int MaxMissiles { get; }
         internal abstract int MaxPowerBombs { get; }

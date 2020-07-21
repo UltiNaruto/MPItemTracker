@@ -13,6 +13,17 @@ namespace Prime.Memory.Constants
         internal const long OFF_CSTATEMANAGER = 0x3E2088;
         internal const long OFF_MORPHBALLBOMBS_COUNT = 0x3DFBFB;
 
+        internal override long CPlayer
+        {
+            get
+            {
+                long result = Dolphin.ReadUInt32(GC.RAMBaseAddress + OFF_CSTATEMANAGER + OFF_CPLAYER);
+                if (result < GC.RAMBaseAddress)
+                    return -1;
+                return result;
+            }
+        }
+
         internal override long CGameState
         {
             get
@@ -55,6 +66,25 @@ namespace Prime.Memory.Constants
                 if (IGT == -1)
                     return "00:00:00.000";
                 return String.Format("{0:00}:{1:00}:{2:00}.{3:000}", IGT / (60 * 60 * 1000), (IGT / (60 * 1000)) % 60, (IGT / 1000) % 60, IGT % 1000);
+            }
+        }
+
+        internal override bool IsMorphed {
+            get
+            {
+                if (CPlayer == -1)
+                    return false;
+                return Dolphin.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 1;
+            }
+        }
+
+        internal override bool IsSwitchingState
+        {
+            get
+            {
+                if (CPlayer == -1)
+                    return false;
+                return Dolphin.ReadUInt8(CPlayer + OFF_CPLAYER_SWITCHSTATE) == 5;
             }
         }
 
