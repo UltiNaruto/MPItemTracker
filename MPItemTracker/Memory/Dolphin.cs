@@ -147,15 +147,25 @@ namespace Prime.Memory
         internal static void InitMP()
         {
             MetroidPrime = null;
-            if (GameCode[3] == 'E')
+            if (GameCode.Substring(0, 3) == "GM8")
             {
-                if(GameVersion == 0)
-                    MetroidPrime = new MP1_NTSC_1_00();
-                if (GameVersion == 2)
-                    MetroidPrime = new MP1_NTSC_1_02();
+                if (GameCode[3] == 'E')
+                {
+                    if (GameVersion == 0)
+                        MetroidPrime = new MP1_NTSC_1_00();
+                    if (GameVersion == 2)
+                        MetroidPrime = new MP1_NTSC_1_02();
+                }
+                if (GameCode[3] == 'P')
+                    MetroidPrime = new MP1_PAL();
             }
-            if (GameCode[3] == 'P')
-                MetroidPrime = new MP1_PAL();
+            if (GameCode.Substring(0, 3) == "R3M")
+            {
+                if (GameCode[3] == 'E')
+                    MetroidPrime = new MPT_MP1_NTSC();
+                if (GameCode[3] == 'P')
+                    MetroidPrime = new MPT_MP1_PAL();
+            }
         }
 
         internal static void InitTracker(Form form)

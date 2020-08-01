@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Prime.Memory.Constants
 {
@@ -11,13 +7,24 @@ namespace Prime.Memory.Constants
         internal const long OFF_CGAMEGLOBALOBJECTS = 0x3DF678;
         internal const long OFF_CGAMESTATE = OFF_CGAMEGLOBALOBJECTS + 0x134;
         internal const long OFF_CSTATEMANAGER = 0x3E2088;
-        internal const long OFF_MORPHBALLBOMBS_COUNT = 0x3DFBFB;
+        internal const long OFF_MORPHBALLBOMBS_COUNT = 0x3DFBF8;
 
         internal override long CPlayer
         {
             get
             {
                 long result = Dolphin.ReadUInt32(GC.RAMBaseAddress + OFF_CSTATEMANAGER + OFF_CPLAYER);
+                if (result < GC.RAMBaseAddress)
+                    return -1;
+                return result;
+            }
+        }
+
+        internal override long CWorld
+        {
+            get
+            {
+                long result = Dolphin.ReadUInt32(GC.RAMBaseAddress + OFF_CSTATEMANAGER + OFF_CWORLD);
                 if (result < GC.RAMBaseAddress)
                     return -1;
                 return result;
@@ -69,12 +76,13 @@ namespace Prime.Memory.Constants
             }
         }
 
-        internal override bool IsMorphed {
+        internal override bool IsMorphed
+        {
             get
             {
                 if (CPlayer == -1)
                     return false;
-                return Dolphin.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 1;
+                return Dolphin.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 1;
             }
         }
 
@@ -84,7 +92,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayer == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayer + OFF_CPLAYER_SWITCHSTATE) == 5;
+                return Dolphin.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 3;
             }
         }
 
@@ -94,7 +102,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return 0;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_MAX_MISSILES);
+                return Dolphin.ReadInt32(CPlayerState + OFF_MAX_MISSILES);
             }
         }
 
@@ -104,7 +112,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return 0;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_MAX_POWERBOMBS);
+                return Dolphin.ReadInt32(CPlayerState + OFF_MAX_POWERBOMBS);
             }
         }
 
@@ -114,7 +122,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_ICEBEAM_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_ICEBEAM_OBTAINED) > 0;
             }
         }
 
@@ -124,7 +132,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_WAVEBEAM_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_WAVEBEAM_OBTAINED) > 0;
             }
         }
 
@@ -134,7 +142,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_PLASMABEAM_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_PLASMABEAM_OBTAINED) > 0;
             }
         }
 
@@ -152,7 +160,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_MORPHBALLBOMBS_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_MORPHBALLBOMBS_OBTAINED) > 0;
             }
         }
 
@@ -170,7 +178,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_FLAMETHROWER_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_FLAMETHROWER_OBTAINED) > 0;
             }
         }
 
@@ -180,7 +188,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_THERMALVISOR_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_THERMALVISOR_OBTAINED) > 0;
             }
         }
 
@@ -190,7 +198,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_CHARGEBEAM_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_CHARGEBEAM_OBTAINED) > 0;
             }
         }
 
@@ -200,7 +208,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_SUPERMISSILE_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_SUPERMISSILE_OBTAINED) > 0;
             }
         }
 
@@ -210,7 +218,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_GRAPPLEBEAM_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_GRAPPLEBEAM_OBTAINED) > 0;
             }
         }
 
@@ -220,7 +228,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_XRAYVISOR_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_XRAYVISOR_OBTAINED) > 0;
             }
         }
 
@@ -230,7 +238,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_ICESPREADER_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_ICESPREADER_OBTAINED) > 0;
             }
         }
 
@@ -240,7 +248,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_SPACEJUMPBOOTS_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_SPACEJUMPBOOTS_OBTAINED) > 0;
             }
         }
 
@@ -250,7 +258,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_MORPHBALL_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_MORPHBALL_OBTAINED) > 0;
             }
         }
 
@@ -260,7 +268,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_BOOSTBALL_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_BOOSTBALL_OBTAINED) > 0;
             }
         }
 
@@ -270,7 +278,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_SPIDERBALL_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_SPIDERBALL_OBTAINED) > 0;
             }
         }
 
@@ -280,7 +288,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_GRAVITYSUIT_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_GRAVITYSUIT_OBTAINED) > 0;
             }
         }
 
@@ -290,7 +298,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_VARIASUIT_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_VARIASUIT_OBTAINED) > 0;
             }
         }
 
@@ -300,7 +308,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_PHAZONSUIT_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_PHAZONSUIT_OBTAINED) > 0;
             }
         }
 
@@ -310,7 +318,7 @@ namespace Prime.Memory.Constants
             {
                 if (CPlayerState == -1)
                     return false;
-                return Dolphin.ReadUInt8(CPlayerState + OFF_WAVEBUSTER_OBTAINED) > 0;
+                return Dolphin.ReadInt32(CPlayerState + OFF_WAVEBUSTER_OBTAINED) > 0;
             }
         }
 
@@ -323,29 +331,29 @@ namespace Prime.Memory.Constants
             switch (index)
             {
                 case 0:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_TRUTH_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_TRUTH_OBTAINED) > 0;
                 case 1:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_STRENGTH_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_STRENGTH_OBTAINED) > 0;
                 case 2:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_ELDER_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_ELDER_OBTAINED) > 0;
                 case 3:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_WILD_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_WILD_OBTAINED) > 0;
                 case 4:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_LIFEGIVER_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_LIFEGIVER_OBTAINED) > 0;
                 case 5:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_WARRIOR_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_WARRIOR_OBTAINED) > 0;
                 case 6:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_CHOZO_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_CHOZO_OBTAINED) > 0;
                 case 7:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_NATURE_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_NATURE_OBTAINED) > 0;
                 case 8:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_SUN_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_SUN_OBTAINED) > 0;
                 case 9:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_WORLD_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_WORLD_OBTAINED) > 0;
                 case 10:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_SPIRIT_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_SPIRIT_OBTAINED) > 0;
                 case 11:
-                    return Dolphin.ReadUInt8(CPlayerState + OFF_ARTIFACT_OF_NEWBORN_OBTAINED) > 0;
+                    return Dolphin.ReadInt32(CPlayerState + OFF_ARTIFACT_OF_NEWBORN_OBTAINED) > 0;
                 default:
                     throw new Exception("There are no artifacts past the 12th artifact");
             }

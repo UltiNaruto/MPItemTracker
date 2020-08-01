@@ -54,6 +54,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Memory\Constants\MPT_MP1_PAL.cs" />
+    <Compile Include="Memory\Constants\MPT_MP1_NTSC.cs" />
     <Compile Include="Memory\Constants\MP1_NTSC_1_02.cs" />
     <Compile Include="Memory\Constants\MP1_PAL.cs" />
     <Compile Include="Memory\Constants\_MP1.cs" />
