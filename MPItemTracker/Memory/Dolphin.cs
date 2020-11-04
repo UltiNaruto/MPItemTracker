@@ -20,11 +20,12 @@ namespace Prime.Memory
         private static IntPtr GameWindowHandle = IntPtr.Zero;
         private static _MP1 MetroidPrime = null;
         private static Dictionary<String, Image> img = new Dictionary<String, Image>();
+        private static IntPtr hHook = IntPtr.Zero;
 
         public static bool IsRunning {
             get
             {
-                return dolphin == null ? true : !dolphin.HasExited;
+                return dolphin == null ? false : !dolphin.HasExited;
             }
         }
 
@@ -83,51 +84,23 @@ namespace Prime.Memory
             {
                 Thread.Sleep(1);
                 m = Utils.CS_VirtualQuery(dolphin, address);
-				if (m.AllocationBase == IntPtr.Zero && m.Protect == Utils.AllocationProtectEnum.PAGE_NOACCESS)
-                {
-                    if (address == (long)m.BaseAddress + (long)m.RegionSize)
-                        break;
-                    address = (long)m.BaseAddress + (long)m.RegionSize;
-                    continue;
-                }
-                if (m.Type != Utils.TypeEnum.MEM_MAPPED)
-                {
-                    if (address == (long)m.BaseAddress + (long)m.RegionSize)
-                        break;
-                    address = (long)m.BaseAddress + (long)m.RegionSize;
-                    continue;
-                }
-                if (m.AllocationProtect != Utils.AllocationProtectEnum.PAGE_READWRITE)
-                {
-                    if (address == (long)m.BaseAddress + (long)m.RegionSize)
-                        break;
-                    address = (long)m.BaseAddress + (long)m.RegionSize;
-                    continue;
-                }
-                if (m.State == Utils.StateEnum.MEM_FREE)
-                {
-                    if (address == (long)m.BaseAddress + (long)m.RegionSize)
-                        break;
-                    address = (long)m.BaseAddress + (long)m.RegionSize;
-                    continue;
-                }
-                if (m.RegionSize.ToInt64() <= 0x20000)
-                {
-                    if (address == (long)m.BaseAddress + (long)m.RegionSize)
-                        break;
-                    address = (long)m.BaseAddress + (long)m.RegionSize;
-                    continue;
-                }
+                if ((m.AllocationBase == IntPtr.Zero && m.Protect == Utils.AllocationProtectEnum.PAGE_NOACCESS) ||
+                    m.Type != Utils.TypeEnum.MEM_MAPPED ||
+                    m.AllocationProtect != Utils.AllocationProtectEnum.PAGE_READWRITE ||
+                    m.State == Utils.StateEnum.MEM_FREE ||
+                    m.RegionSize.ToInt64() != 0x2000000)
+                    goto GameInit_END;
                 RAMBaseAddr = Is32BitProcess ? m.AllocationBase.ToInt32() : m.AllocationBase.ToInt64();
                 if (!IsValidGameCode(GameCode))
                 {
                     RAMBaseAddr = 0;
-                    if (address == (long)m.BaseAddress + (long)m.RegionSize)
-                        break;
-                    address = (long)m.BaseAddress + (long)m.RegionSize;
-                    continue;
+                    goto GameInit_END;
                 }
                 break;
+GameInit_END:
+                if (address == (long)m.BaseAddress + (long)m.RegionSize)
+                    break;
+                address = (long)m.BaseAddress + (long)m.RegionSize;
             } while (address <= MaxAddress);
             return RAMBaseAddr != 0;
         }
@@ -139,6 +112,8 @@ namespace Prime.Memory
 
         internal static void AttachWindow(IntPtr hwnd)
         {
+            if (!IsRunning)
+                return;
             Prime.WinAPI.Imports.SetWindowLongPtr(hwnd, Prime.WinAPI.Imports.GWL_STYLE, new IntPtr(Prime.WinAPI.Imports.GetWindowLongPtr(hwnd, Prime.WinAPI.Imports.GWL_STYLE).ToInt32() | Prime.WinAPI.Imports.WS_CHILD));
             Prime.WinAPI.Imports.SetWindowLongPtr(hwnd, Prime.WinAPI.Imports.GWL_EXSTYLE, new IntPtr(Prime.WinAPI.Imports.GetWindowLongPtr(hwnd, Prime.WinAPI.Imports.GWL_EXSTYLE).ToInt32() | Prime.WinAPI.Imports.WS_EX_LAYERED | Prime.WinAPI.Imports.WS_EX_TRANSPARENT));
             Prime.WinAPI.Imports.SetParentWindow(hwnd, GameWindowHandle);
@@ -159,12 +134,19 @@ namespace Prime.Memory
                 if (GameCode[3] == 'P')
                     MetroidPrime = new MP1_PAL();
             }
-            if (GameCode.Substring(0, 3) == "R3M")
+            if (GameCode.Substring(0, 2) == "R3")
             {
-                if (GameCode[3] == 'E')
-                    MetroidPrime = new MPT_MP1_NTSC();
-                if (GameCode[3] == 'P')
-                    MetroidPrime = new MPT_MP1_PAL();
+                // Trilogy
+                if (GameCode[2] == 'M')
+                {
+                    if (GameCode[3] == 'E')
+                        MetroidPrime = new MPT_MP1_NTSC_U();
+                    if (GameCode[3] == 'P')
+                        MetroidPrime = new MPT_MP1_PAL();
+                }
+                if(GameCode[2] == 'I')
+                    if (GameCode[3] == 'J')
+                        MetroidPrime = new MPT_MP1_NTSC_J();
             }
         }
 
@@ -212,6 +194,9 @@ namespace Prime.Memory
                     foreach (KeyValuePair<String, Image> kvp in img)
                         DrawUpgradeIcon(g, gameWindowPosAndSize.Value, kvp.Key);
             }
+
+            g.Save();
+            g.Flush();
         }
 
         internal static void UpdateTrackerInfo(MPItemTracker.Form1 form)

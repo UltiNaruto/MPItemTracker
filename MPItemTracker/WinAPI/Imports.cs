@@ -10,6 +10,7 @@ namespace Prime.WinAPI
     internal class Imports
     {
         #region C Defines
+        internal static int WM_PAINT = 0xF;
         internal static int WS_EX_TRANSPARENT = 0x20;
         internal static int WS_EX_LAYERED = 0x80000;
         internal static int WS_CHILD = 0x40000000;
@@ -113,6 +114,17 @@ namespace Prime.WinAPI
                 return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{{Left={0},Top={1},Right={2},Bottom={3}}}", Left, Top, Right, Bottom);
             }
         }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct PAINTSTRUCT
+        {
+            public IntPtr hdc;
+            public bool fErase;
+            public RECT rcPaint;
+            public bool fRestore;
+            public bool fIncUpdate;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)] public byte[] rgbReserved;
+        }
         #endregion
 
         #region C Imports
@@ -147,6 +159,23 @@ namespace Prime.WinAPI
 
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
+
+        internal delegate int HookProc(int code, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowsHookEx", SetLastError = true)]
+        internal static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hMod, uint dwThreadId);
+
+        [DllImport("user32.dll")]
+        internal static extern int CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        internal static extern IntPtr BeginPaint(IntPtr hwnd, out PAINTSTRUCT lpPaint);
+
+        [DllImport("user32.dll")]
+        internal static extern bool EndPaint(IntPtr hWnd, [In] ref PAINTSTRUCT lpPaint);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr lpdwProcessId);
         #endregion
 
         static IntPtr[] GetAllChildWindowHandles(Process process)
