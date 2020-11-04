@@ -2,11 +2,11 @@
 
 namespace Prime.Memory.Constants
 {
-    internal class MPT_MP1_NTSC : _MP1
+    internal class MPT_MP1_NTSC_J : _MP1
     {
-        internal const long OFF_CGAMEGLOBALOBJECTS = 0x4DEC90;
+        internal const long OFF_CGAMEGLOBALOBJECTS = 0x4DEF10;
         internal const long OFF_CGAMESTATE = OFF_CGAMEGLOBALOBJECTS + 0x134;
-        internal const long OFF_CSTATEMANAGER = 0x4BF41C;
+        internal const long OFF_CSTATEMANAGER = 0x4BF69C;
         internal const long OFF_MORPHBALLBOMBS_COUNT = 0x4C0F20;
 
         internal override long CPlayer
