@@ -54,16 +54,18 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Memory\Constants\MP1_NTSC_K.cs" />
+    <Compile Include="Memory\Constants\MP1_NTSC_J.cs" />
     <Compile Include="Memory\Constants\MPT_MP1_NTSC_J.cs" />
     <Compile Include="Memory\Constants\MPT_MP1_PAL.cs" />
     <Compile Include="Memory\Constants\MPT_MP1_NTSC_U.cs" />
-    <Compile Include="Memory\Constants\MP1_NTSC_1_02.cs" />
+    <Compile Include="Memory\Constants\MP1_NTSC_U_1_02.cs" />
     <Compile Include="Memory\Constants\MP1_PAL.cs" />
     <Compile Include="Memory\Constants\_MP1.cs" />
     <Compile Include="Memory\Dolphin.cs" />
     <Compile Include="Memory\Constants\GC.cs" />
     <Compile Include="Memory\MemStream.cs" />
-    <Compile Include="Memory\Constants\MP1_NTSC_1_00.cs" />
+    <Compile Include="Memory\Constants\MP1_NTSC_U_1_00.cs" />
     <Compile Include="Memory\Utils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

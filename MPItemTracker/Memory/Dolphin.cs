@@ -130,9 +130,13 @@ GameInit_END:
                         MetroidPrime = new MP1_NTSC_1_00();
                     if (GameVersion == 2)
                         MetroidPrime = new MP1_NTSC_1_02();
+                    if (GameVersion == 48)
+                        MetroidPrime = new MP1_NTSC_K();
                 }
                 if (GameCode[3] == 'P')
                     MetroidPrime = new MP1_PAL();
+                if (GameCode[3] == 'J')
+                    MetroidPrime = new MP1_NTSC_J();
             }
             if (GameCode.Substring(0, 2) == "R3")
             {
