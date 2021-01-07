@@ -7,7 +7,7 @@ namespace Prime.Memory.Constants
         internal const long OFF_CGAMEGLOBALOBJECTS = 0x457478;
         internal const long OFF_CGAMESTATE = OFF_CGAMEGLOBALOBJECTS + 0x134;
         internal const long OFF_CSTATEMANAGER = 0x459E88;
-        internal const long OFF_MORPHBALLBOMBS_COUNT = 0x4597F8;
+        internal const long OFF_MORPHBALLBOMBS_COUNT = 0x4579F8;
 
         internal override long CPlayer
         {
