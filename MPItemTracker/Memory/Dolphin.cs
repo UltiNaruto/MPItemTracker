@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Utils;
 
 namespace Prime.Memory
 {
@@ -156,28 +157,28 @@ GameInit_END:
 
         internal static void InitTracker(Form form)
         {
-            img.Add("Missiles", Image.FromFile(@"img\missilelauncher.png"));
-            img.Add("Morph Ball", Image.FromFile(@"img\morphball.png"));
-            img.Add("Morph Ball Bombs", Image.FromFile(@"img\morphballbomb.png"));
-            img.Add("Power Bombs", Image.FromFile(@"img\powerbomb.png"));
-            img.Add("Boost Ball", Image.FromFile(@"img\boostball.png"));
-            img.Add("Spider Ball", Image.FromFile(@"img\spiderball.png"));
-            img.Add("Space Jump Boots", Image.FromFile(@"img\spacejumpboots.png"));
-            img.Add("Varia Suit", Image.FromFile(@"img\variasuit.png"));
-            img.Add("Gravity Suit", Image.FromFile(@"img\gravitysuit.png"));
-            img.Add("Phazon Suit", Image.FromFile(@"img\phazonsuit.png"));
-            img.Add("Wave Beam", Image.FromFile(@"img\wavebeam.png"));
-            img.Add("Ice Beam", Image.FromFile(@"img\icebeam.png"));
-            img.Add("Plasma Beam", Image.FromFile(@"img\plasmabeam.png"));
-            img.Add("Charge Beam", Image.FromFile(@"img\chargebeam.png"));
-            img.Add("Grapple Beam", Image.FromFile(@"img\grapplebeam.png"));
-            img.Add("Super Missile", Image.FromFile(@"img\supermissile.png"));
-            img.Add("Wavebuster", Image.FromFile(@"img\wavebuster.png"));
-            img.Add("Ice Spreader", Image.FromFile(@"img\icespreader.png"));
-            img.Add("Flamethrower", Image.FromFile(@"img\flamethrower.png"));
-            img.Add("Thermal Visor", Image.FromFile(@"img\thermalvisor.png"));
-            img.Add("XRay Visor", Image.FromFile(@"img\xrayvisor.png"));
-            img.Add("Artifacts", Image.FromFile(@"img\artifacts.png"));
+            img.Add("Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img\missilelauncher.png"), Color.Black, 3));
+            img.Add("Morph Ball", ImageUtils.MakeOutline(Image.FromFile(@"img\morphball.png"), Color.Black, 3));
+            img.Add("Morph Ball Bombs", ImageUtils.MakeOutline(Image.FromFile(@"img\morphballbomb.png"), Color.Black, 3));
+            img.Add("Power Bombs", ImageUtils.MakeOutline(Image.FromFile(@"img\powerbomb.png"), Color.Black, 3));
+            img.Add("Boost Ball", ImageUtils.MakeOutline(Image.FromFile(@"img\boostball.png"), Color.Black, 3));
+            img.Add("Spider Ball", ImageUtils.MakeOutline(Image.FromFile(@"img\spiderball.png"), Color.Black, 3));
+            img.Add("Space Jump Boots", ImageUtils.MakeOutline(Image.FromFile(@"img\spacejumpboots.png"), Color.Black, 3));
+            img.Add("Varia Suit", ImageUtils.MakeOutline(Image.FromFile(@"img\variasuit.png"), Color.Black, 3));
+            img.Add("Gravity Suit", ImageUtils.MakeOutline(Image.FromFile(@"img\gravitysuit.png"), Color.Black, 3));
+            img.Add("Phazon Suit", ImageUtils.MakeOutline(Image.FromFile(@"img\phazonsuit.png"), Color.Black, 3));
+            img.Add("Wave Beam", ImageUtils.MakeOutline(Image.FromFile(@"img\wavebeam.png"), Color.Black, 3));
+            img.Add("Ice Beam", ImageUtils.MakeOutline(Image.FromFile(@"img\icebeam.png"), Color.Black, 3));
+            img.Add("Plasma Beam", ImageUtils.MakeOutline(Image.FromFile(@"img\plasmabeam.png"), Color.Black, 3));
+            img.Add("Charge Beam", ImageUtils.MakeOutline(Image.FromFile(@"img\chargebeam.png"), Color.Black, 3));
+            img.Add("Grapple Beam", ImageUtils.MakeOutline(Image.FromFile(@"img\grapplebeam.png"), Color.Black, 3));
+            img.Add("Super Missile", ImageUtils.MakeOutline(Image.FromFile(@"img\supermissile.png"), Color.Black, 3));
+            img.Add("Wavebuster", ImageUtils.MakeOutline(Image.FromFile(@"img\wavebuster.png"), Color.Black, 3));
+            img.Add("Ice Spreader", ImageUtils.MakeOutline(Image.FromFile(@"img\icespreader.png"), Color.Black, 3));
+            img.Add("Flamethrower", ImageUtils.MakeOutline(Image.FromFile(@"img\flamethrower.png"), Color.Black, 3));
+            img.Add("Thermal Visor", ImageUtils.MakeOutline(Image.FromFile(@"img\thermalvisor.png"), Color.Black, 3));
+            img.Add("XRay Visor", ImageUtils.MakeOutline(Image.FromFile(@"img\xrayvisor.png"), Color.Black, 3));
+            img.Add("Artifacts", ImageUtils.MakeOutline(Image.FromFile(@"img\artifacts.png"), Color.Black, 3));
             form.Hide();
             form.FormBorderStyle = FormBorderStyle.None;
             form.BackColor = form.TransparencyKey;
@@ -231,7 +232,7 @@ GameInit_END:
             String displayText = "x";
             int artifactCount = 0;
             int imgSize = (int)((float)windowSize.Width * 0.0282906581f);
-            int fontSize = (int)(15.7894735f * 1.33333f * 0.75f);
+            int fontSize = (int)(15.7894735f * (1.0f - (1.0f / imgSize)));
             if (ratio < 1.4f)
                 imgSize = (int)((float)windowSize.Width * 0.0402906581f);
             if (imgSize > 64)
@@ -370,10 +371,10 @@ GameInit_END:
             if (!img.ContainsKey(upgrade_title))
                 return;
 
-            g.DrawImage(img[upgrade_title], x, MetroidPrime.IsMorphed ? windowSize.Height - imgSize * 2 - 10 : 5, imgSize, imgSize);
+            g.DrawImage(img[upgrade_title], x, MetroidPrime.IsMorphed ? windowSize.Height - imgSize * 2 - 18 - fontSize : 5, imgSize, imgSize);
 
             if(displayText != "x")
-                g.DrawString(displayText, _Font, Brushes.White, x + 0.6f * imgSize, MetroidPrime.IsMorphed ? windowSize.Height - imgSize - 7 : 5 + imgSize);
+                g.DrawString(displayText, _Font, Brushes.White, x + 0.6f * imgSize, MetroidPrime.IsMorphed ? windowSize.Height - imgSize - 15 - fontSize : 5 + imgSize);
         }
 
         internal static Byte[] Read(long gc_address, int size, bool BigEndian = false)
