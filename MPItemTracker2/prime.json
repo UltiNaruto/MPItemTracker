@@ -1,0 +1,28 @@
+{
+	"pickups": [
+		"Energy Tanks",
+		"Missiles",
+		"Morph Ball",
+		"Morph Ball Bombs",
+		"Power Bombs",
+		"Boost Ball",
+		"Spider Ball",
+		"Space Jump Boots",
+		"Varia Suit",
+		"Gravity Suit",
+		"Phazon Suit",
+		"Wave Beam",
+		"Ice Beam",
+		"Plasma Beam",
+		"Charge Beam",
+		"Grapple Beam",
+		"Super Missile",
+		"Wavebuster",
+		"Ice Spreader",
+		"Flamethrower",
+		"Scan Visor",
+		"Thermal Visor",
+		"XRay Visor",
+		"Artifacts"
+	]
+}

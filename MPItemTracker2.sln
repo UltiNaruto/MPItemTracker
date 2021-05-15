@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPItemTracker2", "MPItemTracker2\MPItemTracker2.csproj", "{E4663B37-1F99-4ED6-893F-10476055204D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_Linux|Any CPU = Debug_Linux|Any CPU
+		Debug_Windows|Any CPU = Debug_Windows|Any CPU
+		Release_Linux|Any CPU = Release_Linux|Any CPU
+		Release_Windows|Any CPU = Release_Windows|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Debug_Linux|Any CPU.ActiveCfg = Debug_Linux|Any CPU
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Debug_Linux|Any CPU.Build.0 = Debug_Linux|Any CPU
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Debug_Windows|Any CPU.ActiveCfg = Debug_Windows|Any CPU
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Debug_Windows|Any CPU.Build.0 = Debug_Windows|Any CPU
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Release_Linux|Any CPU.ActiveCfg = Release_Linux|Any CPU
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Release_Linux|Any CPU.Build.0 = Release_Linux|Any CPU
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Release_Windows|Any CPU.ActiveCfg = Release_Windows|Any CPU
+		{E4663B37-1F99-4ED6-893F-10476055204D}.Release_Windows|Any CPU.Build.0 = Release_Windows|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03F4E0CA-5B6D-42BF-92F8-283700A818A1}
+	EndGlobalSection
+EndGlobal

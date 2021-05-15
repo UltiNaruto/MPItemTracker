@@ -1,0 +1,32 @@
+{
+	"pickups": [
+		"Energy Tanks",
+		"Ship Missiles",
+		"Ship Grapple Beam",
+		"Morph Ball",
+		"Morph Ball Bombs",
+		"Boost Ball",
+		"Spider Ball",
+		"Hyper Ball",
+		"Space Jump Boots",
+		"Screw Attack",
+		"Hypermode",
+		"PED Suit",
+		"Hazard Shield",
+		"Plasma Beam",
+		"Nova Beam",
+		"Charge Beam",
+		"Grapple Lasso",
+		"Grapple Swing",
+		"Grapple Voltage",
+		"Hyper Grapple",
+		"Missiles",
+		"Ice Missile",
+		"Seeker Launcher",
+		"Hyper Missile",
+		"Scan Visor",
+		"Command Visor",
+		"XRay Visor",
+		"Energy Cells"
+	]
+}
