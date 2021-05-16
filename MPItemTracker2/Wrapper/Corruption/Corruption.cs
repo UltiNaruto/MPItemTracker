@@ -13,26 +13,26 @@ namespace Wrapper.Corruption
         protected const long OFF_CPLAYERSTATE = 0x35A0;
 
         internal const long OFF_HEALTH = 0x8;
-		internal const long OFF_MAX_HEALTH = OFF_HEALTH + 0x4;
+        internal const long OFF_MAX_HEALTH = OFF_HEALTH + 0x4;
         internal const long OFF_POWERBEAM_OBTAINED = 0x58;
         internal const long OFF_PLASMABEAM_OBTAINED = 0x64;
         internal const long OFF_NOVABEAM_OBTAINED = 0x70;
-		internal const long OFF_CHARGEBEAM_OBTAINED = 0x7C;
+        internal const long OFF_CHARGEBEAM_OBTAINED = 0x7C;
         internal const long OFF_MISSILES = 0x84;
         internal const long OFF_MAX_MISSILES = OFF_MISSILES + 4;
         internal const long OFF_ICEMISSILE_OBTAINED = 0x94;
         internal const long OFF_SEEKERLAUNCHER_OBTAINED = 0xA0;
-		internal const long OFF_GRAPPLELASSO_OBTAINED = 0xAC;
-		internal const long OFF_GRAPPLESWING_OBTAINED = 0xB8;
-		internal const long OFF_GRAPPLEVOLTAGE_OBTAINED = 0xC4;
+        internal const long OFF_GRAPPLELASSO_OBTAINED = 0xAC;
+        internal const long OFF_GRAPPLESWING_OBTAINED = 0xB8;
+        internal const long OFF_GRAPPLEVOLTAGE_OBTAINED = 0xC4;
         internal const long OFF_MORPHBALLBOMBS_OBTAINED = 0xD0;
-		internal const long OFF_COMBATVISOR_OBTAINED = 0xDC;
+        internal const long OFF_COMBATVISOR_OBTAINED = 0xDC;
         internal const long OFF_SCANVISOR_OBTAINED = 0xE8;
         internal const long OFF_COMMANDVISOR_OBTAINED = 0xF4;
         internal const long OFF_XRAYVISOR_OBTAINED = 0x100;
         internal const long OFF_SPACEJUMPBOOTS_OBTAINED = 0x10C;
-		internal const long OFF_SCREWATTACK_OBTAINED = 0x118;
-		internal const long OFF_SUITTYPE_OBTAINED = 0x120;
+        internal const long OFF_SCREWATTACK_OBTAINED = 0x118;
+        internal const long OFF_SUITTYPE_OBTAINED = 0x120;
         internal const long OFF_PEDSUIT_OBTAINED = 0x12C;
         internal const long OFF_ENERGYTANKS = 0x144;
         internal const long OFF_MAX_ENERGYTANKS = OFF_ENERGYTANKS + 4;
@@ -48,16 +48,16 @@ namespace Wrapper.Corruption
         internal const long OFF_MORPHBALL_OBTAINED = 0x1D8;
         internal const long OFF_BOOSTBALL_OBTAINED = 0x1E4;
         internal const long OFF_SPIDERBALL_OBTAINED = 0x1F0;
-		internal const long OFF_HYPERMODE_OBTAINED = 0x1FC;
+        internal const long OFF_HYPERMODE_OBTAINED = 0x1FC;
         internal const long OFF_HYPERBEAM_OBTAINED = 0x208;
-		internal const long OFF_HYPERMISSILE_OBTAINED = 0x214;
-		internal const long OFF_HYPERBALL_OBTAINED = 0x220;
-		internal const long OFF_HYPERGRAPPLE_OBTAINED = 0x22C;
+        internal const long OFF_HYPERMISSILE_OBTAINED = 0x214;
+        internal const long OFF_HYPERBALL_OBTAINED = 0x220;
+        internal const long OFF_HYPERGRAPPLE_OBTAINED = 0x22C;
         internal const long OFF_SHIP_GRAPPLEBEAM_OBTAINED = 0x268;
         internal const long OFF_SHIP_MISSILES = 0x270;
         internal const long OFF_MAX_SHIP_MISSILES = OFF_SHIP_MISSILES + 4;
-		internal const long OFF_ENERGY_CELL_1_USED = 0x2D0;
-		internal const long OFF_ENERGY_CELL_2_USED = OFF_ENERGY_CELL_1_USED + 0xC;
+        internal const long OFF_ENERGY_CELL_1_USED = 0x2D0;
+        internal const long OFF_ENERGY_CELL_2_USED = OFF_ENERGY_CELL_1_USED + 0xC;
         internal const long OFF_ENERGY_CELL_3_USED = OFF_ENERGY_CELL_2_USED + 0xC;
         internal const long OFF_ENERGY_CELL_4_USED = OFF_ENERGY_CELL_3_USED + 0xC;
         internal const long OFF_ENERGY_CELL_5_USED = OFF_ENERGY_CELL_4_USED + 0xC;
@@ -204,6 +204,8 @@ namespace Wrapper.Corruption
                     return HaveSpaceJumpBoots;
                 case "Screw Attack":
                     return HaveScrewAttack;
+                case "Hypermode":
+                    return HaveHypermode;
                 case "PED Suit":
                     return HavePEDSuit;
                 case "Hazard Shield":
@@ -268,6 +270,8 @@ namespace Wrapper.Corruption
                     return HaveSpaceJumpBoots ? 1 : 0;
                 case "Screw Attack":
                     return HaveScrewAttack ? 1 : 0;
+                case "Hypermode":
+                    return HaveHypermode ? 1 : 0;
                 case "PED Suit":
                     return HavePEDSuit ? 1 : 0;
                 case "Hazard Shield":
