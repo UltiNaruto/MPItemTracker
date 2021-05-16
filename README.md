@@ -11,4 +11,16 @@ corruption.json : Contains the pickup's icons order for any Prime 1 version
 
 # Instructions
 
-Start the game you want then run MPItemTracker2.exe and when in game you will see the In Game Time showing up
+Start the game you want on Dolphin (PrimeHack is also supported) then run MPItemTracker2.exe and when in game you will see the In Game Time showing up
+
+Morphing will put your icons at the bottom and switching between morph/unmorph state won't draw the icons until you are morphed/unmorphed
+
+# Screenshots
+Metroid Prime :
+![Alt text](https://i.imgur.com/rQtTMxg.png "Metroid Prime")
+
+Metroid Prime 2 - Echoes :
+![Alt Text](https://i.imgur.com/SZvSdRm.png "Metroid Prime 2 - Echoes")
+
+Metroid Prime 3 - Corruption :
+![Alt Text](https://i.imgur.com/XQcJ851.png "Metroid Prime 3 - Corruption")
