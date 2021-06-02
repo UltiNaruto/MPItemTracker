@@ -15,23 +15,25 @@ namespace Wrapper
         internal static Byte[] Read(long gc_address, int size)
         {
             long pc_address = 0;
-            if (dolphin.HasExited)
-                return null;
             if (size == 0)
                 return new byte[0];
-            pc_address = RAMBaseAddr + (gc_address - GCRAMBaseAddr);
-            return ImportsMgr.ReadProcessMemory(dolphin, pc_address, size);
+            try {
+                pc_address = RAMBaseAddr + (gc_address - GCRAMBaseAddr);
+                return ImportsMgr.ReadProcessMemory(dolphin, pc_address, size);
+            } catch { 
+                return null;
+            }
         }
 
         internal static void Write(long gc_address, Byte[] datas)
         {
             long pc_address = 0;
-            if (dolphin.HasExited)
-                return;
             if (datas == null)
                 return;
-            pc_address = RAMBaseAddr + (gc_address - GCRAMBaseAddr);
-            ImportsMgr.WriteProcessMemory(dolphin, pc_address, datas);
+            try {
+                pc_address = RAMBaseAddr + (gc_address - GCRAMBaseAddr);
+                ImportsMgr.WriteProcessMemory(dolphin, pc_address, datas);
+            } catch { }
         }
 
         internal static Byte ReadUInt8(long gc_address)

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using Utils;
 
@@ -122,9 +124,19 @@ namespace Wrapper.Prime
         protected virtual bool Artifacts(int index) { return false; }
 
         protected Dictionary<String, Image> img = new Dictionary<string, Image>();
+        protected int missile_launcher_provided_ammo = 5;
+        protected int missiles_per_expansion = 5;
 
         public Prime()
         {
+            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
+            dynamic json = JObject.Parse(File.ReadAllText(CurDir + "prime.json"));
+            try
+            {
+                missile_launcher_provided_ammo = json.missile_launcher_provided_ammo;
+                missiles_per_expansion = json.missiles_per_expansion;
+            }
+            catch { }
             int outline_width = 2;
             img.Add("Energy Tanks", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/energytank.png"), Color.Black, outline_width));
             img.Add("Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/missilelauncher.png"), Color.Black, outline_width));
@@ -232,7 +244,7 @@ namespace Wrapper.Prime
                 case "Energy Tanks":
                     return MaxEnergyTanks;
                 case "Missiles":
-                    return MaxMissiles / 5;
+                    return (MaxMissiles - missile_launcher_provided_ammo) / missiles_per_expansion;
                 case "Morph Ball":
                     return HaveMorphBall ? 1 : 0;
                 case "Morph Ball Bombs":

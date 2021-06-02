@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using Utils;
 
 namespace Wrapper.Corruption
@@ -131,9 +133,19 @@ namespace Wrapper.Corruption
         protected virtual bool EnergyCells(int index) { return false; }
 
         protected Dictionary<String, Image> img = new Dictionary<string, Image>();
+        protected int missile_launcher_provided_ammo = 5;
+        protected int missiles_per_expansion = 5;
 
         public Corruption()
         {
+            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
+            dynamic json = JObject.Parse(File.ReadAllText(CurDir + "corruption.json"));
+            try
+            {
+                missile_launcher_provided_ammo = json.missile_launcher_provided_ammo;
+                missiles_per_expansion = json.missiles_per_expansion;
+            }
+            catch { }
             int outline_width = 2;
             img.Add("Energy Tanks", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/energy_tank.png"), Color.Black, outline_width));
             img.Add("Ship Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/ship_missile.png"), Color.Black, outline_width));
@@ -291,7 +303,7 @@ namespace Wrapper.Corruption
                 case "Hyper Grapple":
                     return HaveHyperGrapple ? 1 : 0;
                 case "Missiles":
-                    return MaxMissiles / 5;
+                    return (MaxMissiles - missile_launcher_provided_ammo) / missiles_per_expansion;
                 case "Ice Missile":
                     return HaveIceMissile ? 1 : 0;
                 case "Seeker Launcher":

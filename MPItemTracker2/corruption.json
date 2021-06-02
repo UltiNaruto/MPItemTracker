@@ -1,4 +1,6 @@
 {
+	"missiles_provided_ammo": 5,
+	"missiles_per_expansion": 5,
 	"pickups": [
 		"Energy Tanks",
 		"Ship Missiles",

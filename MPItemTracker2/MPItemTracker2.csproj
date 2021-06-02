@@ -134,6 +134,9 @@
     <None Update="img\echoes\boost_ball.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="img\echoes\cannon_ball.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="img\echoes\charge_beam.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -163,6 +166,9 @@
     </None>
     <None Update="img\echoes\dark_visor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="img\echoes\double_damage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="img\echoes\echo_visor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

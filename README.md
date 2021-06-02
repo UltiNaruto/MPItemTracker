@@ -20,7 +20,7 @@ Metroid Prime :
 ![Alt text](https://i.imgur.com/rQtTMxg.png "Metroid Prime")
 
 Metroid Prime 2 - Echoes :
-![Alt Text](https://i.imgur.com/SZvSdRm.png "Metroid Prime 2 - Echoes")
+![Alt Text](https://i.imgur.com/vrFUzVd.png "Metroid Prime 2 - Echoes")
 
 Metroid Prime 3 - Corruption :
 ![Alt Text](https://i.imgur.com/XQcJ851.png "Metroid Prime 3 - Corruption")

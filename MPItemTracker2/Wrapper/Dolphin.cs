@@ -346,6 +346,8 @@ namespace Wrapper
 
         internal static void DrawUpgradeIcon(Graphics g, Font _Font, String upgrade_title, int x, int y, int imgSize)
         {
+            bool has_pickup = false;
+            bool is_unlimited = false;
             String str = "x";
             int pickup_count = 0;
             int str_width = 0;
@@ -353,14 +355,46 @@ namespace Wrapper
             if (img == null)
                 return;
             pickup_count = MetroidPrime.GetPickupCount(upgrade_title);
+            has_pickup = MetroidPrime.HasPickup(upgrade_title);
+            is_unlimited = pickup_count == - 1;
+            if (MetroidPrime.GetType().BaseType == typeof(Echoes.Echoes))
+            {
+                if (upgrade_title == "Boost Ball")
+                {
+                    if (MetroidPrime.HasPickup("Cannon Ball"))
+                    {
+                        if (pickup_count == 0)
+                        {   
+                            img = MetroidPrime.GetIcon("Cannon Ball");
+                            if (img == null)
+                                return;
+                            has_pickup = true;
+                        }
+                        else
+                        {
+                            str = "C";
+                        }
+                    }
+                }
+            }
 
-            if (pickup_count > 0)
+            if (has_pickup)
             {
                 g.DrawImage(img, x, y, imgSize, imgSize);
 
-                if (pickup_count > 1)
+                if(is_unlimited) {
+                    str = "∞";
+                    _Font = new Font(_Font.FontFamily, 1.75f * _Font.Size);
+                    y -= (int)(0.3f * _Font.Size);
+                } else {
+                    if (str == "x")
+                    {
+                        str += pickup_count;
+                    }
+                }
+
+                if (str != "x0" && str != "x1")
                 {
-                    str += pickup_count;
                     str_width = (int)g.MeasureString(str, _Font).Width;
                     g.DrawString(str, _Font, Brushes.White, x + imgSize - str_width, y + imgSize);
                 }

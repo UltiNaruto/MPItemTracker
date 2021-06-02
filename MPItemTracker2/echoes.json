@@ -3,6 +3,9 @@
 	"dark_ammo_per_expansion": 50,
 	"light_beam_provided_ammo": 50,
 	"light_ammo_per_expansion": 50,
+	"seeker_launcher_provided_ammo": 5,
+	"missile_launcher_provided_ammo": 5,
+	"missiles_per_expansion": 5,
 	"pickups": [
 		"Energy Transfer Module",
 		"Energy Tanks",
@@ -21,6 +24,7 @@
 		"Annihilator Beam",
 		"Dark Ammo Expansion",
 		"Light Ammo Expansion",
+		"Double Damage",
 		"Charge Beam",
 		"Grapple Beam",
 		"Screw Attack",

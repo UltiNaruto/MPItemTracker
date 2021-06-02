@@ -19,6 +19,16 @@ namespace Wrapper.Echoes
             }
         }
 
+        protected override long CPlayerMorph
+        {
+            get
+            {
+                if (CPlayer == 0)
+                    return 0;
+                return GCMem.ReadUInt32(CPlayer + OFF_CPLAYER_CPLAYERMORPH);
+            }
+        }
+
         protected override long CWorld
         {
             get
@@ -39,7 +49,9 @@ namespace Wrapper.Echoes
         {
             get
             {
-                return GCMem.ReadUInt32(OFF_CSTATEMANAGER + OFF_CPLAYERSTATE);
+                if (CPlayer == 0)
+                    return 0;
+                return GCMem.ReadUInt32(CPlayer + OFF_CPLAYERSTATE);
             }
         }
 
@@ -53,23 +65,13 @@ namespace Wrapper.Echoes
             }
         }
 
-        protected override bool _IsMorphed
+        protected override int MorphState
         {
             get
             {
                 if (CPlayer == 0)
-                    return false;
-                return GCMem.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 1;
-            }
-        }
-
-        protected override bool _IsSwitchingState
-        {
-            get
-            {
-                if (CPlayer == 0)
-                    return true;
-                return GCMem.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) > 1;
+                    return -1;
+                return GCMem.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE);
             }
         }
 
@@ -390,6 +392,55 @@ namespace Wrapper.Echoes
                 if (CPlayerState == 0)
                     return false;
                 return GCMem.ReadUInt32(CPlayerState + OFF_ENERGY_TRANSFER_MODULE_OBTAINED) > 0;
+            }
+        }
+
+        protected override bool HaveDoubleDamage
+        {
+            get
+            {
+                if (CPlayerState == 0)
+                    return false;
+                return GCMem.ReadUInt32(CPlayerState + OFF_MP_DOUBLE_DAMAGE_OBTAINED) > 0;
+            }
+        }
+
+        protected override bool HaveUnlimitedMissiles
+        {
+            get
+            {
+                if (CPlayerState == 0)
+                    return false;
+                return GCMem.ReadUInt32(CPlayerState + OFF_MP_UNLIMITED_MISSILES_OBTAINED) > 0;
+            }
+        }
+
+        protected override bool HaveUnlimitedBeamAmmo
+        {
+            get
+            {
+                if (CPlayerState == 0)
+                    return false;
+                return GCMem.ReadUInt32(CPlayerState + OFF_MP_UNLIMITED_BEAM_AMMO_OBTAINED) > 0;
+            }
+        }
+
+        protected override bool HaveCannonBall
+        {
+            get
+            {
+                if (CPlayerState == 0)
+                    return false;
+                if (CPlayer != 0 && CPlayerMorph != 0)
+                {
+                    // if launched by cannon
+                    if (GCMem.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 1 &&
+                        GCMem.ReadUInt32(CPlayerMorph + OFF_CPLAYERMORPH_MORPHSTATE) == 0)
+                    {
+                        return false;
+                    }
+                }
+                return GCMem.ReadUInt32(CPlayerState + OFF_MP_CANNON_BALL_OBTAINED) > 0;
             }
         }
 

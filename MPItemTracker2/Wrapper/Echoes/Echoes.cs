@@ -16,7 +16,9 @@ namespace Wrapper.Echoes
         protected const long OFF_CWORLD_MREA = 0x88;
         protected const long OFF_CWORLD_MLVLID = 0x6C;
         protected const long OFF_CWORLD_MORPHSTATE = 0x2F0;
-        protected const long OFF_CPLAYERSTATE = 0x150C;
+        protected const long OFF_CPLAYER_CPLAYERMORPH = 0x1174;
+        protected const long OFF_CPLAYERMORPH_MORPHSTATE = 0x74;
+        protected const long OFF_CPLAYERSTATE = 0x1314;
 
         internal const long OFF_HEALTH = 0x14;
         internal const long OFF_DARKBEAM_OBTAINED = 0x6C;
@@ -64,6 +66,19 @@ namespace Wrapper.Echoes
         internal const long OFF_MAX_DARKBEAM_AMMO = OFF_DARKBEAM_AMMO + 4;
         internal const long OFF_LIGHTBEAM_AMMO = 0x288;
         internal const long OFF_MAX_LIGHTBEAM_AMMO = OFF_LIGHTBEAM_AMMO + 4;
+        internal const long OFF_MP_INVISIBILITY_OBTAINED = 0x30C;
+        internal const long OFF_MP_DOUBLE_DAMAGE_OBTAINED = 0x318;
+        internal const long OFF_MP_INVINCIBILITY_OBTAINED = 0x324;
+        internal const long OFF_MP_UNLIMITED_MISSILES_OBTAINED = 0x42C;
+        internal const long OFF_MP_UNLIMITED_BEAM_AMMO_OBTAINED = 0x438;
+        internal const long OFF_MP_DARK_SHIELD_OBTAINED = 0x444;
+        internal const long OFF_MP_LIGHT_SHIELD_OBTAINED = 0x450;
+        internal const long OFF_MP_ABSORB_ATTACK_OBTAINED = 0x45C;
+        internal const long OFF_MP_DEATH_BALL_OBTAINED = 0x468;
+        internal const long OFF_MP_SCAN_VIRUS_OBTAINED = 0x474;
+        internal const long OFF_MP_DISABLE_BALL_OBTAINED = 0x4B0;
+        internal const long OFF_MP_HACKED_EFFECT_OBTAINED = 0x4D4;
+        internal const long OFF_MP_CANNON_BALL_OBTAINED = 0x4DC;
         internal const long OFF_VIOLET_TRANSLATOR_OBTAINED = 0x4EC;
         internal const long OFF_AMBER_TRANSLATOR_OBTAINED = 0x4F8;
         internal const long OFF_EMERALD_TRANSLATOR_OBTAINED = 0x504;
@@ -77,13 +92,13 @@ namespace Wrapper.Echoes
         internal const long OFF_ENERGY_TRANSFER_MODULE_OBTAINED = 0x564;
 
         protected virtual long CPlayer { get; }
+        protected virtual long CPlayerMorph { get; }
         protected virtual long CWorld { get; }
         protected virtual long CGameState { get; }
         protected virtual long CPlayerState { get; }
         protected virtual long _IGT { get; }
 
-        protected virtual bool _IsMorphed { get; }
-        protected virtual bool _IsSwitchingState { get; }
+        protected virtual int MorphState { get; }
 
         protected virtual int MaxMissiles { get; }
         protected virtual int MaxPowerBombs { get; }
@@ -91,7 +106,8 @@ namespace Wrapper.Echoes
         protected virtual int MaxDarkAmmo { get; }
         protected virtual int MaxLightAmmo { get; }
 
-        protected bool HaveEnergyTanks {
+        protected bool HaveEnergyTanks
+        {
             get
             {
                 return MaxEnergyTanks > 0;
@@ -108,7 +124,7 @@ namespace Wrapper.Echoes
 
         protected virtual bool HaveDarkBeam { get; }
 
-        protected bool HaveLightAmmo 
+        protected bool HaveLightAmmo
         {
             get
             {
@@ -160,6 +176,10 @@ namespace Wrapper.Echoes
         protected virtual bool HaveEmeraldTranslator { get; }
         protected virtual bool HaveCobaltTranslator { get; }
         protected virtual bool HaveEnergyTransferModule { get; }
+        protected virtual bool HaveDoubleDamage { get; }
+        protected virtual bool HaveUnlimitedMissiles { get; }
+        protected virtual bool HaveUnlimitedBeamAmmo { get; }
+        protected virtual bool HaveCannonBall { get; }
         protected virtual bool DarkAgonKeys(int index) { return false; }
         protected virtual bool DarkTorvusKeys(int index) { return false; }
         protected virtual bool IngHiveKeys(int index) { return false; }
@@ -170,17 +190,25 @@ namespace Wrapper.Echoes
         protected int dark_ammo_per_expansion = 50;
         protected int light_beam_provided_ammo = 50;
         protected int light_ammo_per_expansion = 50;
+        protected int seeker_launcher_provided_ammo = 5;
+        protected int missile_launcher_provided_ammo = 5;
+        protected int missiles_per_expansion = 5;
 
         public Echoes()
         {
             String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
             dynamic json = JObject.Parse(File.ReadAllText(CurDir + "echoes.json"));
-            try {
+            try
+            {
                 dark_beam_provided_ammo = json.dark_beam_provided_ammo;
                 dark_ammo_per_expansion = json.dark_ammo_per_expansion;
                 light_beam_provided_ammo = json.light_beam_provided_ammo;
                 light_ammo_per_expansion = json.light_ammo_per_expansion;
-            } catch { }
+                seeker_launcher_provided_ammo = json.seeker_launcher_provided_ammo;
+                missile_launcher_provided_ammo = json.missile_launcher_provided_ammo;
+                missiles_per_expansion = json.missiles_per_expansion;
+            }
+            catch { }
             int outline_width = 2;
             img.Add("Energy Tanks", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/energy_tank.png"), Color.Black, outline_width));
             img.Add("Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/missile_launcher.png"), Color.Black, outline_width));
@@ -209,6 +237,8 @@ namespace Wrapper.Echoes
             img.Add("Echo Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/echo_visor.png"), Color.Black, outline_width));
             img.Add("Dark Ammo Expansion", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_ammo_expansion.png"), Color.Black, outline_width));
             img.Add("Light Ammo Expansion", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/light_ammo_expansion.png"), Color.Black, outline_width));
+            img.Add("Double Damage", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/double_damage.png"), Color.Black, outline_width));
+            img.Add("Cannon Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/cannon_ball.png"), Color.Black, outline_width));
             img.Add("Energy Transfer Module", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/energy_transfer_module.png"), Color.Black, outline_width));
             img.Add("Violet Translator", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/violet_translator.png"), Color.Black, outline_width));
             img.Add("Amber Translator", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/amber_translator.png"), Color.Black, outline_width));
@@ -227,17 +257,17 @@ namespace Wrapper.Echoes
 
         public override bool IsMorphed()
         {
-            return _IsMorphed;
+            return (MorphState & 1) == 1;
         }
 
         public override bool IsSwitchingState()
         {
-            return _IsSwitchingState;
+            return MorphState < 0 && MorphState > 1;
         }
 
         public override bool HasPickup(string pickup)
         {
-            switch(pickup)
+            switch (pickup)
             {
                 case "Dark Ammo Expansion":
                     return HaveDarkAmmo;
@@ -303,15 +333,19 @@ namespace Wrapper.Echoes
                     return HaveCobaltTranslator;
                 case "Energy Transfer Module":
                     return HaveEnergyTransferModule;
+                case "Double Damage":
+                    return HaveDoubleDamage;
+                case "Cannon Ball":
+                    return HaveCannonBall;
+                case "Dark Agon Keys":
+                    return GetPickupCount(pickup) > 0;
+                case "Dark Torvus Keys":
+                    return GetPickupCount(pickup) > 0;
+                case "Ing Hive Keys":
+                    return GetPickupCount(pickup) > 0;
+                case "Sky Temple Keys":
+                    return GetPickupCount(pickup) > 0;
                 default:
-                    if (pickup.StartsWith("Dark Agon Key ", StringComparison.InvariantCulture))
-                        return DarkAgonKeys(Convert.ToInt32(pickup.Substring(14)) - 1);
-                    if (pickup.StartsWith("Dark Torvus Key ", StringComparison.InvariantCulture))
-                        return DarkTorvusKeys(Convert.ToInt32(pickup.Substring(16)) - 1);
-                    if (pickup.StartsWith("Ing Hive Key ", StringComparison.InvariantCulture))
-                        return IngHiveKeys(Convert.ToInt32(pickup.Substring(13)) - 1);
-                    if (pickup.StartsWith("Sky Temple Key ", StringComparison.InvariantCulture))
-                        return SkyTempleKeys(Convert.ToInt32(pickup.Substring(13)) - 1);
                     return false;
             }
         }
@@ -322,19 +356,27 @@ namespace Wrapper.Echoes
             switch (pickup)
             {
                 case "Dark Ammo Expansion":
-                    if(HaveDarkBeam)
+                    if (HaveUnlimitedBeamAmmo)
+                        return -1;
+                    if (HaveDarkBeam)
                         return (MaxDarkAmmo - dark_beam_provided_ammo) / dark_ammo_per_expansion;
                     return MaxDarkAmmo / dark_ammo_per_expansion;
                 case "Light Ammo Expansion":
+                    if (HaveUnlimitedBeamAmmo)
+                        return -1;
                     if (HaveLightBeam)
                         return (MaxLightAmmo - light_beam_provided_ammo) / light_ammo_per_expansion;
                     return MaxLightAmmo / light_ammo_per_expansion;
                 case "Energy Tanks":
                     return MaxEnergyTanks;
                 case "Missiles":
-                    if (HaveSeekerLauncher)
-                        return (MaxMissiles - 5) / 5;
-                    return MaxMissiles / 5;
+                    if (HaveMissiles)
+                    {
+                        if (HaveUnlimitedMissiles)
+                            return -1;
+                        return (MaxMissiles - missile_launcher_provided_ammo - ((HaveSeekerLauncher ? 1 : 0) * seeker_launcher_provided_ammo)) / missiles_per_expansion;
+                    }
+                    return 0;
                 case "Morph Ball":
                     return HaveMorphBall ? 1 : 0;
                 case "Morph Ball Bombs":
@@ -391,6 +433,10 @@ namespace Wrapper.Echoes
                     return HaveCobaltTranslator ? 1 : 0;
                 case "Energy Transfer Module":
                     return HaveEnergyTransferModule ? 1 : 0;
+                case "Double Damage":
+                    return HaveDoubleDamage ? 1 : 0;
+                case "Cannon Ball":
+                    return HaveCannonBall ? 1 : 0;
                 case "Dark Agon Keys":
                     for (i = 1; i <= 3; i++)
                         if (DarkAgonKeys(i - 1))
@@ -418,9 +464,12 @@ namespace Wrapper.Echoes
 
         public override Image GetIcon(string pickup)
         {
-            try {
+            try
+            {
                 return img[pickup];
-            } catch {
+            }
+            catch
+            {
                 return null;
             }
         }
