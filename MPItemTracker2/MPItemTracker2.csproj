@@ -4,6 +4,11 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net4.8</TargetFramework>
     <Configurations>Debug_Windows;Release_Windows;Debug_Linux;Release_Linux</Configurations>
+    <Version>2.2</Version>
+    <PackageId>MPItemTracker</PackageId>
+    <Authors>MPItemTracker</Authors>
+    <Company>MPItemTracker</Company>
+    <Product>MPItemTracker</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Linux|AnyCPU'">
@@ -28,10 +33,15 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="corruption.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -60,7 +60,7 @@ namespace Wrapper.Prime
             {
                 if (CPlayer == 0)
                     return false;
-                return GCMem.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 1;
+                return GCMem.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE + 0x10) == 1;
             }
         }
 
@@ -70,7 +70,7 @@ namespace Wrapper.Prime
             {
                 if (CPlayer == 0)
                     return true;
-                return GCMem.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) > 1;
+                return GCMem.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE + 0x10) > 1;
             }
         }
 

@@ -10,13 +10,14 @@ namespace Wrapper.Echoes
     public class Echoes : Metroid
     {
         protected const long OFF_PLAYTIME = 0x48;
-        protected const long OFF_CPLAYER = 0x1624;
-        protected const long OFF_CPLAYER_MORPHSTATE = 0x38C;
-        protected const long OFF_CWORLD = 0x8D0;
+		protected const long OFF_CWORLD = 0x8D0;
         protected const long OFF_CWORLD_MREA = 0x88;
         protected const long OFF_CWORLD_MLVLID = 0x6C;
         protected const long OFF_CWORLD_MORPHSTATE = 0x2F0;
-        protected const long OFF_CPLAYER_CPLAYERMORPH = 0x1174;
+        protected const long OFF_CPLAYER = 0x1624;
+        protected const long OFF_CPLAYER_MORPHSTATE = 0x38C;
+		protected const long OFF_CPLAYER_CPLAYERMORPH = 0x1174;
+		protected const long OFF_CPLAYER_ISINCANNON = 0x13D4;
         protected const long OFF_CPLAYERMORPH_MORPHSTATE = 0x74;
         protected const long OFF_CPLAYERSTATE = 0x1314;
 

@@ -431,7 +431,9 @@ namespace Wrapper.Echoes
                 {
                     // if launched by cannon
                     if (GCMem.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE - 0x14) == 1 &&
-                        GCMem.ReadUInt32(CPlayerMorph + OFF_CPLAYERMORPH_MORPHSTATE) != 1)
+                        (GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ISINCANNON - 0x14) == 0 ||
+                        (GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ISINCANNON - 0x14) == 1 &&
+                        GCMem.ReadUInt8(CPlayerMorph + OFF_CPLAYERMORPH_MORPHSTATE) > 0)))
                     {
                         return false;
                     }

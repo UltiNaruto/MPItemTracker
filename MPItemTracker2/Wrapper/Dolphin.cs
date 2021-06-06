@@ -11,7 +11,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
 using System.Threading;
-using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace Wrapper
 {
@@ -22,6 +22,8 @@ namespace Wrapper
         static bool Is32BitProcess = false;
         static Metroid MetroidPrime = null;
         static String[] pickups_to_show = null;
+        static Key refresh_config_key = Key.None;
+        static bool ingame_timer_ms_precision = true;
 
         internal static bool IsRunning
         {
@@ -75,6 +77,7 @@ namespace Wrapper
         internal static bool Init()
         {
             String window_title = "";
+            LoadConfig();
 #if WINDOWS
             dolphin = Process.GetProcessesByName("dolphin").Length == 0 ? null : Process.GetProcessesByName("dolphin").First();
 #elif LINUX
@@ -107,6 +110,48 @@ namespace Wrapper
 
             dolphin_window = IntPtr.Zero;
             return false;
+        }
+
+        internal static void LoadConfig()
+        {
+            int i;
+            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
+            String game_config_filename = String.Empty;
+            dynamic config = JObject.Parse(File.ReadAllText(CurDir + "config.json"));
+            try {
+                refresh_config_key = KeysUtils.ConvertFromString((String)config.refresh_config_key);
+                ingame_timer_ms_precision = config.ingame_timer_ms_precision;
+                if (MetroidPrime != null)
+                {
+                    if (MetroidPrime.GetType().BaseType == typeof(Prime.Prime))
+                    {
+                        game_config_filename = "prime.json";
+                    }
+                    if (MetroidPrime.GetType().BaseType == typeof(Echoes.Echoes))
+                    {
+                        game_config_filename = "echoes.json";
+                    }
+                    if (MetroidPrime.GetType().BaseType == typeof(Corruption.Corruption))
+                    {
+                        game_config_filename = "corruption.json";
+                    }
+                    if (game_config_filename != String.Empty)
+                    {
+                        dynamic game_config = JObject.Parse(File.ReadAllText(CurDir + game_config_filename));
+                        try {
+                            pickups_to_show = new String[game_config.pickups.Count];
+                            for (i = 0; i < game_config.pickups.Count; i++)
+                                pickups_to_show[i] = game_config.pickups[i];
+                        } catch {
+                            pickups_to_show = null;
+                        }
+                    }
+                }
+            } catch {
+                refresh_config_key = Key.F5;
+                ingame_timer_ms_precision = true;
+                pickups_to_show = null;
+            }
         }
 
         internal static bool GameInit()
@@ -307,7 +352,6 @@ namespace Wrapper
 
         internal static void UpdateTracker(Graphics g)
         {
-            bool isMorphed = false;
             int i, start_index = pickups_to_show.Length / 2 - (1 - pickups_to_show.Length % 2);
             String IGT = "";
             Size windowSize = ImportsMgr.GetWindowSize(dolphin_window);
@@ -321,8 +365,7 @@ namespace Wrapper
 
             if (MetroidPrime.IsIngame())
             {
-                IGT = MetroidPrime.IGTAsStr();
-                isMorphed = MetroidPrime.IsMorphed();
+                IGT = MetroidPrime.IGTAsStr(ingame_timer_ms_precision);
                 DrawIGT(g, IGT_Font, windowSize.Width / 2 - (int)g.MeasureString(IGT, IGT_Font).Width / 2, y + imgSize + (int)IGT_Font.Size, IGT);
                 if (!MetroidPrime.IsSwitchingState())
                     for (i = 0; i < pickups_to_show.Length; i++)
@@ -407,6 +450,13 @@ namespace Wrapper
                 return;
             FormUtils.SetWindowPosition(new Point(0, 0));
             FormUtils.SetWindowSize(ImportsMgr.GetWindowSize(dolphin_window));
+            form.Invoke(new Action(() =>
+            {
+                if (Keyboard.IsKeyDown(Dolphin.refresh_config_key))
+                {
+                    Dolphin.LoadConfig();
+                }
+            }));
         }
     }
 }
