@@ -229,9 +229,9 @@ namespace Wrapper.Prime
                     return HaveIceSpreader;
                 case "Flamethrower":
                     return HaveFlamethrower;
+                case "Artifacts":
+                    return GetPickupCount(pickup) > 0;
                 default:
-                    if (pickup.StartsWith("Artifact ", StringComparison.InvariantCulture))
-                        return Artifacts(Convert.ToInt32(pickup.Substring(9)) - 1);
                     return false;
             }
         }
@@ -289,7 +289,7 @@ namespace Wrapper.Prime
                     return HaveFlamethrower ? 1 : 0;
                 case "Artifacts":
                     for (int i = 1;i<=12;i++)
-                        if (HasPickup("Artifact " + i))
+                        if (Artifacts(i - 1))
                             count++;
                     return count;
                 default:
