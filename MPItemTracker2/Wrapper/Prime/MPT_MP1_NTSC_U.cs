@@ -7,7 +7,7 @@ namespace Wrapper.Prime
         protected const long OFF_CGAMEGLOBALOBJECTS = 0x804DEC90;
         protected const long OFF_CGAMESTATE = OFF_CGAMEGLOBALOBJECTS + 0x134;
         protected const long OFF_CSTATEMANAGER = 0x804BF41C;
-        protected const long OFF_MORPHBALLBOMBS_COUNT = 0x804C11A0;
+        protected const long OFF_MORPHBALLBOMBS_COUNT = 0x804C0F20;
 
         protected override long CPlayer
         {

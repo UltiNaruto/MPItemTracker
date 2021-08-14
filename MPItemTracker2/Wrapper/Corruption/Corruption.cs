@@ -194,6 +194,7 @@ namespace Wrapper.Corruption
 
         public override bool HasPickup(string pickup)
         {
+            int i;
             switch (pickup)
             {
                 case "Energy Tanks":
@@ -250,9 +251,12 @@ namespace Wrapper.Corruption
                     return HaveCommandVisor;
                 case "XRay Visor":
                     return HaveXRayVisor;
+                case "Energy Cells":
+                    for (i = 1; i <= 9; i++)
+                        if (EnergyCells(i - 1))
+                            return true;
+                    return false;
                 default:
-                    if (pickup.StartsWith("Energy Cell ", StringComparison.InvariantCulture))
-                        return EnergyCells(Convert.ToInt32(pickup.Substring(12)) - 1);
                     return false;
             }
         }
