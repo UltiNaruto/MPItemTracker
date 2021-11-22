@@ -142,7 +142,7 @@ namespace Wrapper.Corruption
             dynamic json = JObject.Parse(File.ReadAllText(CurDir + "corruption.json"));
             try
             {
-                missile_launcher_provided_ammo = json.missile_launcher_provided_ammo;
+                missile_launcher_provided_ammo = json.missiles_provided_ammo;
                 missiles_per_expansion = json.missiles_per_expansion;
             }
             catch { }

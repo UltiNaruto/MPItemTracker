@@ -106,6 +106,16 @@ namespace Wrapper.Prime
             }
         }
 
+        protected override bool HavePowerBeam
+        {
+            get
+            {
+                if (CPlayerState == 0)
+                    return false;
+                return GCMem.ReadInt32(CPlayerState + OFF_POWERBEAM_OBTAINED) > 0;
+            }
+        }
+
         protected override bool HaveIceBeam
         {
             get

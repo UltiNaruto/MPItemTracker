@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net4.8</TargetFramework>
     <Configurations>Debug_Windows;Release_Windows;Debug_Linux;Release_Linux</Configurations>
-    <Version>2.4</Version>
+    <Version>2.5</Version>
     <PackageId>MPItemTracker</PackageId>
     <Authors>MPItemTracker</Authors>
     <Company>MPItemTracker</Company>
@@ -222,6 +222,9 @@
     <None Update="img\echoes\morph_ball_bomb.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="img\echoes\power_beam.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="img\echoes\power_bomb.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -295,6 +298,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="img\prime\plasmabeam.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="img\prime\powerbeam.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="img\prime\powerbomb.png">

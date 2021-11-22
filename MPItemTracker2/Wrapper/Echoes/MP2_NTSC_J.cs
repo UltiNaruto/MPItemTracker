@@ -125,6 +125,16 @@ namespace Wrapper.Echoes
             }
         }
 
+        protected override bool HavePowerBeam
+        {
+            get
+            {
+                if (CPlayerState == 0)
+                    return false;
+                return GCMem.ReadUInt32(CPlayerState + OFF_POWERBEAM_OBTAINED) > 0;
+            }
+        }
+
         protected override bool HaveDarkBeam
         {
             get

@@ -83,6 +83,7 @@ namespace Wrapper.Prime
             }
         }
 
+        protected virtual bool HavePowerBeam { get; }
         protected virtual bool HaveIceBeam { get; }
         protected virtual bool HaveWaveBeam { get; }
         protected virtual bool HavePlasmaBeam { get; }
@@ -133,7 +134,7 @@ namespace Wrapper.Prime
             dynamic json = JObject.Parse(File.ReadAllText(CurDir + "prime.json"));
             try
             {
-                missile_launcher_provided_ammo = json.missile_launcher_provided_ammo;
+                missile_launcher_provided_ammo = json.missiles_provided_ammo;
                 missiles_per_expansion = json.missiles_per_expansion;
             }
             catch { }
@@ -149,6 +150,7 @@ namespace Wrapper.Prime
             img.Add("Varia Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/variasuit.png"), Color.Black, outline_width));
             img.Add("Gravity Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/gravitysuit.png"), Color.Black, outline_width));
             img.Add("Phazon Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/phazonsuit.png"), Color.Black, outline_width));
+            img.Add("Power Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/powerbeam.png"), Color.Black, outline_width));
             img.Add("Wave Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/wavebeam.png"), Color.Black, outline_width));
             img.Add("Ice Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/icebeam.png"), Color.Black, outline_width));
             img.Add("Plasma Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/plasmabeam.png"), Color.Black, outline_width));
@@ -211,6 +213,8 @@ namespace Wrapper.Prime
                     return HaveThermalVisor;
                 case "XRay Visor":
                     return HaveXRayVisor;
+                case "Power Beam":
+                    return HavePowerBeam;
                 case "Wave Beam":
                     return HaveWaveBeam;
                 case "Ice Beam":
@@ -269,6 +273,8 @@ namespace Wrapper.Prime
                     return HaveThermalVisor ? 1 : 0;
                 case "XRay Visor":
                     return HaveXRayVisor ? 1 : 0;
+                case "Power Beam":
+                    return HavePowerBeam ? 1 : 0;
                 case "Wave Beam":
                     return HaveWaveBeam ? 1 : 0;
                 case "Ice Beam":

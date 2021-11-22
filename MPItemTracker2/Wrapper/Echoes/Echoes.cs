@@ -22,6 +22,7 @@ namespace Wrapper.Echoes
         protected const long OFF_CPLAYERSTATE = 0x1314;
 
         internal const long OFF_HEALTH = 0x14;
+        internal const long OFF_POWERBEAM_OBTAINED = 0x60;
         internal const long OFF_DARKBEAM_OBTAINED = 0x6C;
         internal const long OFF_LIGHTBEAM_OBTAINED = 0x78;
         internal const long OFF_ANNIHILATORBEAM_OBTAINED = 0x84;
@@ -122,6 +123,8 @@ namespace Wrapper.Echoes
                 return MaxDarkAmmo > 0;
             }
         }
+
+        protected virtual bool HavePowerBeam { get; }
 
         protected virtual bool HaveDarkBeam { get; }
 
@@ -224,6 +227,7 @@ namespace Wrapper.Echoes
             img.Add("Dark Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_suit.png"), Color.Black, outline_width));
             img.Add("Light Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/light_suit.png"), Color.Black, outline_width));
             img.Add("Gravity Boost", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/gravity_boost.png"), Color.Black, outline_width));
+            img.Add("Power Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/power_beam.png"), Color.Black, outline_width));
             img.Add("Dark Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_beam.png"), Color.Black, outline_width));
             img.Add("Light Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/light_beam.png"), Color.Black, outline_width));
             img.Add("Annihilator Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/annihilator_beam.png"), Color.Black, outline_width));
@@ -302,6 +306,8 @@ namespace Wrapper.Echoes
                     return HaveDarkVisor;
                 case "Echo Visor":
                     return HaveEchoVisor;
+                case "Power Beam":
+                    return HavePowerBeam;
                 case "Dark Beam":
                     return HaveDarkBeam;
                 case "Light Beam":
@@ -402,6 +408,8 @@ namespace Wrapper.Echoes
                     return HaveDarkVisor ? 1 : 0;
                 case "Echo Visor":
                     return HaveEchoVisor ? 1 : 0;
+                case "Power Beam":
+                    return HavePowerBeam ? 1 : 0;
                 case "Dark Beam":
                     return HaveDarkBeam ? 1 : 0;
                 case "Light Beam":
