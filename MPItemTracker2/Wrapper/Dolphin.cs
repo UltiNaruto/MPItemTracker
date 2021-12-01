@@ -188,6 +188,8 @@ namespace Wrapper
                     {
                         if (GameVersion == 0)
                             MetroidPrime = new Prime.MP1_NTSC_0_00();
+                        if (GameVersion == 1)
+                            MetroidPrime = new Prime.MP1_NTSC_0_01();
                         if (GameVersion == 2)
                             MetroidPrime = new Prime.MP1_NTSC_0_02();
                         if (GameVersion == 48)
