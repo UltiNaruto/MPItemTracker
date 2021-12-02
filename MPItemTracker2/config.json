@@ -1,5 +1,5 @@
 // For keys name, please refer to this : https://docs.microsoft.com/fr-fr/dotnet/api/system.windows.input.key?view=net-5.0
 {
 	"refresh_config_key": "F5",
-	"ingame_timer_ms_precision": true
+	"igt_display_type": "WithMS"
 }

@@ -6,11 +6,12 @@ namespace Wrapper
     public class Metroid
     {
         public virtual long IGT() { return 0; }
-        public String IGTAsStr(bool ms_precision)
+        public String IGTAsStr(IGTDisplayType igt_display_type)
         {
             long __IGT = IGT();
-            String res = String.Format("{0:00}:{1:00}:{2:00}", __IGT / (60 * 60 * 1000), (__IGT / (60 * 1000)) % 60, (__IGT / 1000) % 60);
-            if(ms_precision)
+            String res = String.Empty;
+            res = String.Format("{0:00}:{1:00}:{2:00}", __IGT / (60 * 60 * 1000), (__IGT / (60 * 1000)) % 60, (__IGT / 1000) % 60);
+            if(igt_display_type == IGTDisplayType.WithMS)
                 res += String.Format(".{0:000}", __IGT % 1000);
             return res;
         }

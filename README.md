@@ -21,7 +21,7 @@ Each image can be changed so you can put your own icons for both 3 games
 
 # Description of the json files
 
-config.json : Contains the toggle for millisecond precision for IGT and a hotkey to reload the tracker config files<br>
+config.json : Contains the IGT display type (None, WithoutMS, WithMS) and a hotkey to reload the tracker config files<br>
 prime.json : Contains the pickup's icons order for any Prime 1 version<br>
 echoes.json : Contains the pickup's icons order for any Echoes version (also you can configure how much Dark/Light Beam has given you ammo and how much each beam expansion gave you ammo)<br>
 corruption.json : Contains the pickup's icons order for any Prime 1 version

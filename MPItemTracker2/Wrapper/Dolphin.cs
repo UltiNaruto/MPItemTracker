@@ -15,6 +15,13 @@ using System.Windows.Input;
 
 namespace Wrapper
 {
+    public enum IGTDisplayType
+    {
+        None,
+        WithoutMS,
+        WithMS
+    };
+
     public static class Dolphin
     {
         static Process dolphin = null;
@@ -23,7 +30,7 @@ namespace Wrapper
         static Metroid MetroidPrime = null;
         static String[] pickups_to_show = null;
         static Key refresh_config_key = Key.None;
-        static bool ingame_timer_ms_precision = true;
+        static IGTDisplayType igt_display_type = IGTDisplayType.None;
 
         internal static bool IsRunning
         {
@@ -115,12 +122,11 @@ namespace Wrapper
         internal static void LoadConfig()
         {
             int i;
-            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
             String game_config_filename = String.Empty;
-            dynamic config = JObject.Parse(File.ReadAllText(CurDir + "config.json"));
+            dynamic config = JObject.Parse(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config.json")));
             try {
                 refresh_config_key = KeysUtils.ConvertFromString((String)config.refresh_config_key);
-                ingame_timer_ms_precision = config.ingame_timer_ms_precision;
+                igt_display_type = (IGTDisplayType)Enum.Parse(typeof(IGTDisplayType), (String)config.igt_display_type);
                 if (MetroidPrime != null)
                 {
                     if (MetroidPrime.GetType().BaseType == typeof(Prime.Prime))
@@ -137,7 +143,7 @@ namespace Wrapper
                     }
                     if (game_config_filename != String.Empty)
                     {
-                        dynamic game_config = JObject.Parse(File.ReadAllText(CurDir + game_config_filename));
+                        dynamic game_config = JObject.Parse(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), game_config_filename)));
                         try {
                             pickups_to_show = new String[game_config.pickups.Count];
                             for (i = 0; i < game_config.pickups.Count; i++)
@@ -149,7 +155,7 @@ namespace Wrapper
                 }
             } catch {
                 refresh_config_key = Key.F5;
-                ingame_timer_ms_precision = true;
+                igt_display_type = IGTDisplayType.WithoutMS;
                 pickups_to_show = null;
             }
         }
@@ -253,7 +259,7 @@ namespace Wrapper
                             {
                                 MetroidPrime = new Echoes.MPT_MP2_PAL();
                             }
-                            // Wait for game to be fully loadedB
+                            // Wait for game to be fully loaded
                             Thread.Sleep(100);
                             if (GCMem.ReadUInt32(0x805795a4) == 0x7d415378)
                             {
@@ -367,8 +373,11 @@ namespace Wrapper
 
             if (MetroidPrime.IsIngame())
             {
-                IGT = MetroidPrime.IGTAsStr(ingame_timer_ms_precision);
-                DrawIGT(g, IGT_Font, windowSize.Width / 2 - (int)g.MeasureString(IGT, IGT_Font).Width / 2, y + imgSize + (int)IGT_Font.Size, IGT);
+                if (igt_display_type != IGTDisplayType.None)
+                {
+                    IGT = MetroidPrime.IGTAsStr(igt_display_type);
+                    DrawIGT(g, IGT_Font, windowSize.Width / 2 - (int)g.MeasureString(IGT, IGT_Font).Width / 2, y + imgSize + (int)IGT_Font.Size, IGT);
+                }
                 if (!MetroidPrime.IsSwitchingState())
                     for (i = 0; i < pickups_to_show.Length; i++)
                     {
