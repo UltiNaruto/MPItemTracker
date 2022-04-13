@@ -47,7 +47,7 @@ namespace MPItemTracker2.Forms
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
-            this.Text = "Metroid Prime Item Tracker 2.7";
+            this.Text = "Metroid Prime Item Tracker";
             this.TransparencyKey = System.Drawing.Color.Pink;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);

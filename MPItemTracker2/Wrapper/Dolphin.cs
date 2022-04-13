@@ -86,13 +86,17 @@ namespace Wrapper
             String window_title = "";
             LoadConfig();
 #if WINDOWS
-            dolphin = Process.GetProcessesByName("dolphin").Length == 0 ? null : Process.GetProcessesByName("dolphin").First();
+            dolphin = Process.GetProcessesByName("dolphin").FirstOrDefault();
 #elif LINUX
             List<IntPtr> childWindows = new List<IntPtr>();
-            dolphin = Process.GetProcessesByName("dolphin-emu").Length == 0 ? null : Process.GetProcessesByName("dolphin-emu").First();
+            dolphin = Process.GetProcessesByName("dolphin-emu").FirstOrDefault();
 #endif
             if (dolphin == null)
+                dolphin = Process.GetProcessesByName("MPR").FirstOrDefault();
+
+            if (dolphin == null)
                 return false;
+
             Is32BitProcess = dolphin.MainModule.BaseAddress.ToInt64() < UInt32.MaxValue;
             dolphin_window = ImportsMgr.FindWindowByPID(dolphin.Id);
             if (dolphin_window == IntPtr.Zero)

@@ -40,7 +40,7 @@ namespace Wrapper.Prime
                 long result = GCMem.ReadUInt32(OFF_CSTATEMANAGER + OFF_CPLAYERSTATE);
                 if (result == 0)
                     return 0;
-                return GCMem.ReadUInt32(result); ;
+                return GCMem.ReadUInt32(result);
             }
         }
 

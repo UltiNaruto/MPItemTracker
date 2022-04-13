@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Wrapper;
@@ -18,9 +19,11 @@ namespace MPItemTracker2.Forms
 
         public MainForm()
         {
+            Version version = new AssemblyName(Assembly.GetExecutingAssembly().FullName).Version;
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Application.ExecutablePath));
             FormUtils.Init(this);
             InitializeComponent();
+            this.Text += $" v{version.Major}.{version.Minor}";
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
