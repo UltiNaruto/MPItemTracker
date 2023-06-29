@@ -472,6 +472,8 @@ namespace Wrapper
                     Dolphin.LoadConfig();
                 }
             }));
+
+            MetroidPrime.Update();
         }
     }
 }

@@ -341,5 +341,7 @@ namespace Wrapper.Corruption
                 return null;
             }
         }
+
+        public override void Update() { }
     }
 }

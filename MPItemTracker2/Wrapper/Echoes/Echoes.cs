@@ -10,14 +10,15 @@ namespace Wrapper.Echoes
     public class Echoes : Metroid
     {
         protected const long OFF_PLAYTIME = 0x48;
-		protected const long OFF_CWORLD = 0x8D0;
+        protected const long OFF_CWORLD = 0x8D0;
         protected const long OFF_CWORLD_MREA = 0x88;
         protected const long OFF_CWORLD_MLVLID = 0x6C;
         protected const long OFF_CWORLD_MORPHSTATE = 0x2F0;
         protected const long OFF_CPLAYER = 0x1624;
         protected const long OFF_CPLAYER_MORPHSTATE = 0x38C;
-		protected const long OFF_CPLAYER_CPLAYERMORPH = 0x1174;
-		protected const long OFF_CPLAYER_ISINCANNON = 0x13D4;
+        protected const long OFF_CPLAYER_CPLAYERMORPH = 0x1174;
+        protected const long OFF_CPLAYER_ENABLEDINPUT_ARRAY = 0x13D4;
+        protected const long OFF_CPLAYERMORPH_USEDBOOST = 0x28;
         protected const long OFF_CPLAYERMORPH_MORPHSTATE = 0x74;
         protected const long OFF_CPLAYERSTATE = 0x1314;
 
@@ -101,6 +102,10 @@ namespace Wrapper.Echoes
         protected virtual long _IGT { get; }
 
         protected virtual int MorphState { get; }
+
+        protected virtual bool WasLaunchedByCannon { get; }
+
+        protected virtual bool HasControl { get; }
 
         protected virtual int MaxMissiles { get; }
         protected virtual int MaxPowerBombs { get; }
@@ -343,7 +348,7 @@ namespace Wrapper.Echoes
                 case "Double Damage":
                     return HaveDoubleDamage;
                 case "Cannon Ball":
-                    return HaveCannonBall;
+                    return Checked_HasCannonBall;
                 case "Dark Agon Keys":
                     return GetPickupCount(pickup) > 0;
                 case "Dark Torvus Keys":
@@ -445,7 +450,7 @@ namespace Wrapper.Echoes
                 case "Double Damage":
                     return HaveDoubleDamage ? 1 : 0;
                 case "Cannon Ball":
-                    return HaveCannonBall ? 1 : 0;
+                    return Checked_HasCannonBall ? 1 : 0;
                 case "Dark Agon Keys":
                     for (i = 1; i <= 3; i++)
                         if (DarkAgonKeys(i - 1))
@@ -471,6 +476,42 @@ namespace Wrapper.Echoes
             }
         }
 
+        public override int GetIntState(string state)
+        {
+            throw new Exception($"Echoes does not have {state} state!");
+        }
+
+        public override bool GetBoolState(string state)
+        {
+            if (state == "HasControl")
+            {
+                return HasControl;
+            }
+
+            if (state == "WasLaunchedByCannon")
+            {
+                return WasLaunchedByCannon;
+            }
+
+            throw new Exception($"Echoes does not have {state} state!");
+        }
+
+        public override void SetIntState(string state, int value)
+        {
+            throw new Exception($"Echoes does not have {state} state!");
+        }
+
+        public override void SetBoolState(string state, bool value)
+        {
+            if (state == "WasLaunchedByCannon" ||
+                state == "HasControl")
+            {
+                throw new Exception($"Cannot set {state} state!");
+            }
+
+            throw new Exception($"Echoes does not have {state} state!");
+        }
+
         public override Image GetIcon(string pickup)
         {
             try
@@ -481,6 +522,33 @@ namespace Wrapper.Echoes
             {
                 return null;
             }
+        }
+
+        bool Prev_WasLaunchedByCannon = false;
+        bool Checked_HasCannonBall = false;
+
+        public override void Update()
+        {
+            // Update cannon ball item
+            bool Cur_WasLaunchedByCannon = GetBoolState("WasLaunchedByCannon");
+            // if not launched by cannon
+            if (!Cur_WasLaunchedByCannon && Prev_WasLaunchedByCannon == Cur_WasLaunchedByCannon)
+            {
+                Checked_HasCannonBall = HaveCannonBall;
+            }
+            else
+            {
+                // if we came from a cannon
+                if(Prev_WasLaunchedByCannon)
+                {
+                    if (!HaveCannonBall)
+                    {
+                        Checked_HasCannonBall = false;
+                    }
+                }
+            }
+            // did we previously used cannon?
+            Prev_WasLaunchedByCannon = Cur_WasLaunchedByCannon;
         }
     }
 }

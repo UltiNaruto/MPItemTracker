@@ -311,5 +311,7 @@ namespace Wrapper.Prime
                 return null;
             }
         }
+
+        public override void Update() { }
     }
 }

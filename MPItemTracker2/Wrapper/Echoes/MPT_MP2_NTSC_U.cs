@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 namespace Wrapper.Echoes
 {
     public class MPT_MP2_NTSC_U : Echoes
@@ -68,6 +70,29 @@ namespace Wrapper.Echoes
                 if (CPlayer == 0)
                     return -1;
                 return GCMem.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE - 0x14);
+            }
+        }
+
+        protected override bool WasLaunchedByCannon
+        {
+            get
+            {
+                if (CPlayerMorph == 0)
+                    return false;
+
+                return MorphState == 1 &&
+                       !HasControl &&
+                       GCMem.ReadUInt32(CPlayerMorph + OFF_CPLAYERMORPH_MORPHSTATE) == 0;
+            }
+        }
+
+        protected override bool HasControl
+        {
+            get
+            {
+                if (CPlayer == 0)
+                    return false;
+                return Enumerable.Range(0, 91).Count(i => GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ENABLEDINPUT_ARRAY - 0x14 + i) > 0) == 91;
             }
         }
 
@@ -437,17 +462,6 @@ namespace Wrapper.Echoes
             {
                 if (CPlayerState == 0)
                     return false;
-                if (CPlayer != 0 && CPlayerMorph != 0)
-                {
-                    // if launched by cannon
-                    if (GCMem.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE - 0x14) == 1 &&
-                        (GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ISINCANNON - 0x14) == 0 ||
-                        (GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ISINCANNON - 0x14) == 1 &&
-                        GCMem.ReadUInt8(CPlayerMorph + OFF_CPLAYERMORPH_MORPHSTATE) > 0)))
-                    {
-                        return false;
-                    }
-                }
                 return GCMem.ReadUInt32(CPlayerState + OFF_MP_CANNON_BALL_OBTAINED - 4) > 0;
             }
         }

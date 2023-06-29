@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Wrapper.Echoes
 {
@@ -72,6 +73,28 @@ namespace Wrapper.Echoes
                 if (CPlayer == 0)
                     return -1;
                 return GCMem.ReadInt32(CPlayer + OFF_CPLAYER_MORPHSTATE);
+            }
+        }
+
+        protected override bool WasLaunchedByCannon
+        {
+            get
+            {
+                if (CPlayerState == 0)
+                    return false;
+
+                return MorphState == 1 &&
+                       GCMem.ReadUInt32(CPlayerMorph + OFF_CPLAYERMORPH_MORPHSTATE) != 1;
+            }
+        }
+
+        protected override bool HasControl
+        {
+            get
+            {
+                if (CPlayer == 0)
+                    return false;
+                return Enumerable.Range(0, 76).Count(i => GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ENABLEDINPUT_ARRAY + i) > 0) == 76;
             }
         }
 
@@ -441,17 +464,6 @@ namespace Wrapper.Echoes
             {
                 if (CPlayerState == 0)
                     return false;
-                if (CPlayer != 0 && CPlayerMorph != 0)
-                {
-                    // if launched by cannon
-                    if (GCMem.ReadUInt32(CPlayer + OFF_CPLAYER_MORPHSTATE) == 1 &&
-                        (GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ISINCANNON) == 0 ||
-                        (GCMem.ReadUInt8(CPlayer + OFF_CPLAYER_ISINCANNON) == 1 &&
-                        GCMem.ReadUInt8(CPlayerMorph + OFF_CPLAYERMORPH_MORPHSTATE) > 0)))
-                    {
-                        return false;
-                    }
-                }
                 return GCMem.ReadUInt32(CPlayerState + OFF_MP_CANNON_BALL_OBTAINED) > 0;
             }
         }

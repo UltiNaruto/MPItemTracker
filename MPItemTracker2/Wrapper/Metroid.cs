@@ -20,6 +20,12 @@ namespace Wrapper
         public virtual bool IsSwitchingState() { return false; }
         public virtual bool HasPickup(String pickup) { return false; }
         public virtual int GetPickupCount(String pickup) { return 0; }
-        public virtual Image GetIcon(String pickup) { return null;  }
+
+        public virtual int GetIntState(String state) { return -1; }
+        public virtual bool GetBoolState(String state) { return false; }
+        public virtual void SetIntState(String state, int value) { }
+        public virtual void SetBoolState(String state, bool value) { }
+        public virtual Image GetIcon(String pickup) { return null; }
+        public virtual void Update() { }
     }
 }
