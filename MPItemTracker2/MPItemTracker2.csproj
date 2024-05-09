@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net48</TargetFramework>
     <Configurations>Debug_Windows;Release_Windows;Debug_Linux;Release_Linux</Configurations>
     <Version>2.9</Version>
