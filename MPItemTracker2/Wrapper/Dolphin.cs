@@ -451,7 +451,7 @@ namespace Wrapper
                     }
                 }
 
-                if (str != "x0" && str != "x1")
+                if (str != "x0" && str != "x1" && !upgrade_title.StartsWith("Progressive "))
                 {
                     str_width = (int)g.MeasureString(str, _Font).Width;
                     g.DrawString(str, _Font, Brushes.White, x + imgSize - str_width, y + imgSize);

@@ -303,6 +303,8 @@ namespace Wrapper.Echoes
                     return HaveDarkSuit;
                 case "Light Suit":
                     return HaveLightSuit;
+                case "Progressive Suit":
+                    return HaveDarkBeam || HaveLightSuit;
                 case "Gravity Boost":
                     return HaveGravityBoost;
                 case "Scan Visor":
@@ -405,6 +407,12 @@ namespace Wrapper.Echoes
                     return HaveDarkSuit ? 1 : 0;
                 case "Light Suit":
                     return HaveLightSuit ? 1 : 0;
+                case "Progressive Suit":
+                    if (HaveLightSuit)
+                        return 2;
+                    if (HaveDarkSuit)
+                        return 1;
+                    return 0;
                 case "Gravity Boost":
                     return HaveGravityBoost ? 1 : 0;
                 case "Scan Visor":
@@ -516,7 +524,17 @@ namespace Wrapper.Echoes
         {
             try
             {
-                return img[pickup];
+                switch (pickup)
+                {
+                    case "Progressive Suit":
+                        if (HaveLightSuit)
+                            return img["Light Suit"];
+                        if (HaveDarkSuit)
+                            return img["Dark Suit"];
+                        return null;
+                    default:
+                        return img[pickup];
+                }
             }
             catch
             {
