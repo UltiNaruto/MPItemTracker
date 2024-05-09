@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net4.8</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <Configurations>Debug_Windows;Release_Windows;Debug_Linux;Release_Linux</Configurations>
     <Version>2.9</Version>
     <PackageId>MPItemTracker</PackageId>
