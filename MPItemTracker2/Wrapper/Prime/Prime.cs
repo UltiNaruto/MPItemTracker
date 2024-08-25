@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+using MPItemTracker2;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
+using System.Text.Json;
 using Utils;
 
 namespace Wrapper.Prime
@@ -130,40 +130,41 @@ namespace Wrapper.Prime
 
         public Prime()
         {
-            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
-            dynamic json = JObject.Parse(File.ReadAllText(CurDir + "prime.json"));
-            try
-            {
-                missile_launcher_provided_ammo = json.missiles_provided_ammo;
-                missiles_per_expansion = json.missiles_per_expansion;
-            }
-            catch { }
+            dynamic json = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, "prime.json")));
+            try {
+                missile_launcher_provided_ammo = json.GetProperty("missiles_provided_ammo").GetInt32();
+                missiles_per_expansion = json.GetProperty("missiles_per_expansion").GetInt32();
+            } catch { }
             int outline_width = 2;
-            img.Add("Energy Tanks", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/energytank.png"), Color.Black, outline_width));
-            img.Add("Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/missilelauncher.png"), Color.Black, outline_width));
-            img.Add("Morph Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/morphball.png"), Color.Black, outline_width));
-            img.Add("Morph Ball Bombs", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/morphballbomb.png"), Color.Black, outline_width));
-            img.Add("Power Bombs", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/powerbomb.png"), Color.Black, outline_width));
-            img.Add("Boost Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/boostball.png"), Color.Black, outline_width));
-            img.Add("Spider Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/spiderball.png"), Color.Black, outline_width));
-            img.Add("Space Jump Boots", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/spacejumpboots.png"), Color.Black, outline_width));
-            img.Add("Varia Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/variasuit.png"), Color.Black, outline_width));
-            img.Add("Gravity Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/gravitysuit.png"), Color.Black, outline_width));
-            img.Add("Phazon Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/phazonsuit.png"), Color.Black, outline_width));
-            img.Add("Power Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/powerbeam.png"), Color.Black, outline_width));
-            img.Add("Wave Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/wavebeam.png"), Color.Black, outline_width));
-            img.Add("Ice Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/icebeam.png"), Color.Black, outline_width));
-            img.Add("Plasma Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/plasmabeam.png"), Color.Black, outline_width));
-            img.Add("Charge Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/chargebeam.png"), Color.Black, outline_width));
-            img.Add("Grapple Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/grapplebeam.png"), Color.Black, outline_width));
-            img.Add("Super Missile", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/supermissile.png"), Color.Black, outline_width));
-            img.Add("Wavebuster", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/wavebuster.png"), Color.Black, outline_width));
-            img.Add("Ice Spreader", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/icespreader.png"), Color.Black, outline_width));
-            img.Add("Flamethrower", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/flamethrower.png"), Color.Black, outline_width));
-            img.Add("Scan Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/scanvisor.png"), Color.Black, outline_width));
-            img.Add("Thermal Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/thermalvisor.png"), Color.Black, outline_width));
-            img.Add("XRay Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/xrayvisor.png"), Color.Black, outline_width));
-            img.Add("Artifacts", ImageUtils.MakeOutline(Image.FromFile(@"img/prime/artifacts.png"), Color.Black, outline_width));
+            var PrimeImagesPath = Path.Combine(Program.ExecutableDir, "img", "prime");
+            img.Add("Energy Tanks", Image.FromFile(Path.Combine(PrimeImagesPath, "energytank.png")));
+            img.Add("Missiles", Image.FromFile(Path.Combine(PrimeImagesPath, "missilelauncher.png")));
+            img.Add("Morph Ball", Image.FromFile(Path.Combine(PrimeImagesPath, "morphball.png")));
+            img.Add("Morph Ball Bombs", Image.FromFile(Path.Combine(PrimeImagesPath, "morphballbomb.png")));
+            img.Add("Power Bombs", Image.FromFile(Path.Combine(PrimeImagesPath, "powerbomb.png")));
+            img.Add("Boost Ball", Image.FromFile(Path.Combine(PrimeImagesPath, "boostball.png")));
+            img.Add("Spider Ball", Image.FromFile(Path.Combine(PrimeImagesPath, "spiderball.png")));
+            img.Add("Space Jump Boots", Image.FromFile(Path.Combine(PrimeImagesPath, "spacejumpboots.png")));
+            img.Add("Varia Suit", Image.FromFile(Path.Combine(PrimeImagesPath, "variasuit.png")));
+            img.Add("Gravity Suit", Image.FromFile(Path.Combine(PrimeImagesPath, "gravitysuit.png")));
+            img.Add("Phazon Suit", Image.FromFile(Path.Combine(PrimeImagesPath, "phazonsuit.png")));
+            img.Add("Power Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "powerbeam.png")));
+            img.Add("Wave Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "wavebeam.png")));
+            img.Add("Ice Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "icebeam.png")));
+            img.Add("Plasma Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "plasmabeam.png")));
+            img.Add("Charge Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "chargebeam.png")));
+            img.Add("Grapple Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "grapplebeam.png")));
+            img.Add("Super Missile", Image.FromFile(Path.Combine(PrimeImagesPath, "supermissile.png")));
+            img.Add("Wavebuster", Image.FromFile(Path.Combine(PrimeImagesPath, "wavebuster.png")));
+            img.Add("Ice Spreader", Image.FromFile(Path.Combine(PrimeImagesPath, "icespreader.png")));
+            img.Add("Flamethrower", Image.FromFile(Path.Combine(PrimeImagesPath, "flamethrower.png")));
+            img.Add("Scan Visor", Image.FromFile(Path.Combine(PrimeImagesPath, "scanvisor.png")));
+            img.Add("Thermal Visor", Image.FromFile(Path.Combine(PrimeImagesPath, "thermalvisor.png")));
+            img.Add("XRay Visor", Image.FromFile(Path.Combine(PrimeImagesPath, "xrayvisor.png")));
+            img.Add("Artifacts", Image.FromFile(Path.Combine(PrimeImagesPath, "artifacts.png")));
+
+            foreach (string key in img.Keys)
+                img[key] = ImageUtils.MakeOutline(img[key], Color.Black, outline_width);
         }
 
         public override long IGT()

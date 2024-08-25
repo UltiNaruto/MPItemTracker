@@ -317,23 +317,13 @@ namespace Wrapper.Corruption
             }
         }
 
-        protected override bool HavePEDSuit
-        {
-            get
-            {
-                if (CPlayerState == 0)
-                    return false;
-                return GCMem.ReadUInt32(CPlayerState + OFF_PEDSUIT_OBTAINED) > 0;
-            }
-        }
-
         protected override bool HaveHazardShield
         {
             get
             {
                 if (CPlayerState == 0)
                     return false;
-                return GCMem.ReadUInt32(CPlayerState + OFF_SUITTYPE_OBTAINED) >= 6;
+                return GCMem.ReadUInt32(CPlayerState + OFF_SUITTYPE_OBTAINED) >= 5;
             }
         }
 

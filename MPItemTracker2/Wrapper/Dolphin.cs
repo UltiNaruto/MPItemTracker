@@ -1,17 +1,20 @@
-﻿using Imports;
+using Dapplo.Windows.Input.Enums;
+using Dapplo.Windows.Input.Keyboard;
+using Dapplo.Windows.Messages;
+using Imports;
+using MPItemTracker2;
 using MPItemTracker2.Utils;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Diagnostics;
-using System.Text;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.IO;
+using System.Linq;
 using System.Threading;
-using System.Windows.Input;
+using System.Text;
+using System.Windows.Forms;
+using System.Text.Json;
 
 namespace Wrapper
 {
@@ -29,7 +32,7 @@ namespace Wrapper
         static bool Is32BitProcess = false;
         static Metroid MetroidPrime = null;
         static String[] pickups_to_show = null;
-        static Key refresh_config_key = Key.None;
+        static KeyCombinationHandler refresh_config_key = null;
         static IGTDisplayType igt_display_type = IGTDisplayType.None;
 
         internal static bool IsRunning
@@ -84,7 +87,6 @@ namespace Wrapper
         internal static bool Init()
         {
             String window_title = "";
-            LoadConfig();
 #if WINDOWS
             dolphin = Process.GetProcessesByName("dolphin").FirstOrDefault();
 #elif LINUX
@@ -105,7 +107,6 @@ namespace Wrapper
             window_title = ImportsMgr.GetWindowTitle(dolphin_window);
             if (window_title.Count((c) => c == '|') >= 4 && window_title.Count((c) => c == '|') <= 5)
                 return true;
-
 #if LINUX
             if (ImportsMgr.FindChildWindows(dolphin_window, ref childWindows).Length > 0)
             {
@@ -118,7 +119,6 @@ namespace Wrapper
                 }
             }
 #endif
-
             dolphin_window = IntPtr.Zero;
             return false;
         }
@@ -127,10 +127,10 @@ namespace Wrapper
         {
             int i;
             String game_config_filename = String.Empty;
-            dynamic config = JObject.Parse(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "config.json")));
+            dynamic config = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, "config.json")));
             try {
-                refresh_config_key = KeysUtils.ConvertFromString((String)config.refresh_config_key);
-                igt_display_type = (IGTDisplayType)Enum.Parse(typeof(IGTDisplayType), (String)config.igt_display_type);
+                refresh_config_key = new KeyCombinationHandler(KeysUtils.ConvertFromString(config.GetProperty("refresh_config_key").GetString()));
+                igt_display_type = (IGTDisplayType)Enum.Parse(typeof(IGTDisplayType), config.GetProperty("igt_display_type").GetString());
                 if (MetroidPrime != null)
                 {
                     if (MetroidPrime.GetType().BaseType == typeof(Prime.Prime))
@@ -147,18 +147,19 @@ namespace Wrapper
                     }
                     if (game_config_filename != String.Empty)
                     {
-                        dynamic game_config = JObject.Parse(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), game_config_filename)));
+                        dynamic game_config = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, game_config_filename)));
                         try {
-                            pickups_to_show = new String[game_config.pickups.Count];
-                            for (i = 0; i < game_config.pickups.Count; i++)
-                                pickups_to_show[i] = game_config.pickups[i];
+                            var pickups = game_config.GetProperty("pickups");
+                            pickups_to_show = new String[pickups.GetArrayLength()];
+                            for (i = 0; i < pickups_to_show.Length; i++)
+                                pickups_to_show[i] = pickups[i].GetString();
                         } catch {
                             pickups_to_show = null;
                         }
                     }
                 }
             } catch {
-                refresh_config_key = Key.F5;
+                refresh_config_key = new KeyCombinationHandler(VirtualKeyCode.F5);
                 igt_display_type = IGTDisplayType.WithoutMS;
                 pickups_to_show = null;
             }
@@ -307,40 +308,19 @@ namespace Wrapper
                         MetroidPrime = new Corruption.MP3_PAL();
                 }
             }
+            LoadConfig();
         }
 
         internal static void InitTracker(Form form)
         {
-            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
-            String config_filename = String.Empty;
-            int i;
-            if (MetroidPrime.GetType().BaseType == typeof(Prime.Prime))
-            {
-                config_filename = "prime.json";
-            }
-            if (MetroidPrime.GetType().BaseType == typeof(Echoes.Echoes))
-            {
-                config_filename = "echoes.json";
-            }
-            if (MetroidPrime.GetType().BaseType == typeof(Corruption.Corruption))
-            {
-                config_filename = "corruption.json";
-            }
-            if (config_filename != String.Empty)
-            {
-                dynamic json = JObject.Parse(File.ReadAllText(CurDir + config_filename));
-                try {
-                    pickups_to_show = new String[json.pickups.Count];
-                    for (i = 0; i < json.pickups.Count; i++)
-                        pickups_to_show[i] = json.pickups[i];
-                    form.Hide();
-                    form.FormBorderStyle = FormBorderStyle.None;
-                    FormUtils.SetFormBGColor(form.TransparencyKey);
-                    form.SetBounds(0, 0, 0, 0, BoundsSpecified.Location);
-                    ImportsMgr.AttachWindow(dolphin_window, form.Handle);
-                    form.Show();
-                } catch { }
-            }
+            try {
+                form.Hide();
+                form.FormBorderStyle = FormBorderStyle.None;
+                FormUtils.SetFormBGColor(form.TransparencyKey);
+                form.SetBounds(0, 0, 0, 0, BoundsSpecified.Location);
+                ImportsMgr.AttachWindow(dolphin_window, form.Handle);
+                form.Show();
+            } catch { }
         }
 
         static Size CalculateIconsRect(int scr_w, int scr_h)
@@ -465,13 +445,11 @@ namespace Wrapper
                 return;
             FormUtils.SetWindowPosition(new Point(0, 0));
             FormUtils.SetWindowSize(ImportsMgr.GetWindowSize(dolphin_window));
-            form.Invoke(new Action(() =>
+
+            new Thread(() =>
             {
-                if (Keyboard.IsKeyDown(Dolphin.refresh_config_key))
-                {
-                    Dolphin.LoadConfig();
-                }
-            }));
+                using (KeyboardHook.KeyboardEvents.Where(refresh_config_key).Subscribe(e => LoadConfig())) { MessageLoop.ProcessMessages(); }
+            }).Start();
 
             MetroidPrime.Update();
         }

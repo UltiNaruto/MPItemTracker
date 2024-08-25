@@ -1,5 +1,5 @@
-// For keys name, please refer to this : https://docs.microsoft.com/fr-fr/dotnet/api/system.windows.input.key?view=net-5.0
 {
+	"_comment": "For keys name, please refer to this : https://github.com/dapplo/Dapplo.Windows/blob/master/src/Dapplo.Windows.Input/Enums/VirtualKeyCode.cs",
 	"refresh_config_key": "F5",
 	"igt_display_type": "WithMS"
 }

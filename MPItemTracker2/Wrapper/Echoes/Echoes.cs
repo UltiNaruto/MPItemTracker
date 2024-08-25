@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+using MPItemTracker2;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text.Json;
 using Utils;
 
 namespace Wrapper.Echoes
@@ -205,59 +206,60 @@ namespace Wrapper.Echoes
 
         public Echoes()
         {
-            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
-            dynamic json = JObject.Parse(File.ReadAllText(CurDir + "echoes.json"));
-            try
-            {
-                dark_beam_provided_ammo = json.dark_beam_provided_ammo;
-                dark_ammo_per_expansion = json.dark_ammo_per_expansion;
-                light_beam_provided_ammo = json.light_beam_provided_ammo;
-                light_ammo_per_expansion = json.light_ammo_per_expansion;
-                seeker_launcher_provided_ammo = json.seeker_launcher_provided_ammo;
-                missile_launcher_provided_ammo = json.missile_launcher_provided_ammo;
-                missiles_per_expansion = json.missiles_per_expansion;
-            }
-            catch { }
+            dynamic json = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, "echoes.json")));
+            try {
+                dark_beam_provided_ammo = json.GetProperty("dark_beam_provided_ammo").GetInt32();
+                dark_ammo_per_expansion = json.GetProperty("dark_ammo_per_expansion").GetInt32();
+                light_beam_provided_ammo = json.GetProperty("light_beam_provided_ammo").GetInt32();
+                light_ammo_per_expansion = json.GetProperty("light_ammo_per_expansion").GetInt32();
+                seeker_launcher_provided_ammo = json.GetProperty("seeker_launcher_provided_ammo").GetInt32();
+                missile_launcher_provided_ammo = json.GetProperty("missiles_provided_ammo").GetInt32();
+                missiles_per_expansion = json.GetProperty("missiles_per_expansion").GetInt32();
+            } catch { }
             int outline_width = 2;
-            img.Add("Energy Tanks", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/energy_tank.png"), Color.Black, outline_width));
-            img.Add("Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/missile_launcher.png"), Color.Black, outline_width));
-            img.Add("Seeker Launcher", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/seeker_launcher.png"), Color.Black, outline_width));
-            img.Add("Morph Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/morph_ball.png"), Color.Black, outline_width));
-            img.Add("Morph Ball Bombs", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/morph_ball_bomb.png"), Color.Black, outline_width));
-            img.Add("Power Bombs", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/power_bomb.png"), Color.Black, outline_width));
-            img.Add("Boost Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/boost_ball.png"), Color.Black, outline_width));
-            img.Add("Spider Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/spider_ball.png"), Color.Black, outline_width));
-            img.Add("Space Jump Boots", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/space_jump_boots.png"), Color.Black, outline_width));
-            img.Add("Screw Attack", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/screw_attack.png"), Color.Black, outline_width));
-            img.Add("Dark Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_suit.png"), Color.Black, outline_width));
-            img.Add("Light Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/light_suit.png"), Color.Black, outline_width));
-            img.Add("Gravity Boost", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/gravity_boost.png"), Color.Black, outline_width));
-            img.Add("Power Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/power_beam.png"), Color.Black, outline_width));
-            img.Add("Dark Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_beam.png"), Color.Black, outline_width));
-            img.Add("Light Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/light_beam.png"), Color.Black, outline_width));
-            img.Add("Annihilator Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/annihilator_beam.png"), Color.Black, outline_width));
-            img.Add("Charge Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/charge_beam.png"), Color.Black, outline_width));
-            img.Add("Grapple Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/grapple_beam.png"), Color.Black, outline_width));
-            img.Add("Super Missile", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/super_missile.png"), Color.Black, outline_width));
-            img.Add("Darkburst", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/darkburst.png"), Color.Black, outline_width));
-            img.Add("Sunburst", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/sunburst.png"), Color.Black, outline_width));
-            img.Add("Sonic Boom", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/sonic_boom.png"), Color.Black, outline_width));
-            img.Add("Scan Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/scan_visor.png"), Color.Black, outline_width));
-            img.Add("Dark Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_visor.png"), Color.Black, outline_width));
-            img.Add("Echo Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/echo_visor.png"), Color.Black, outline_width));
-            img.Add("Dark Ammo Expansion", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_ammo_expansion.png"), Color.Black, outline_width));
-            img.Add("Light Ammo Expansion", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/light_ammo_expansion.png"), Color.Black, outline_width));
-            img.Add("Double Damage", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/double_damage.png"), Color.Black, outline_width));
-            img.Add("Cannon Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/cannon_ball.png"), Color.Black, outline_width));
-            img.Add("Energy Transfer Module", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/energy_transfer_module.png"), Color.Black, outline_width));
-            img.Add("Violet Translator", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/violet_translator.png"), Color.Black, outline_width));
-            img.Add("Amber Translator", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/amber_translator.png"), Color.Black, outline_width));
-            img.Add("Emerald Translator", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/emerald_translator.png"), Color.Black, outline_width));
-            img.Add("Cobalt Translator", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/cobalt_translator.png"), Color.Black, outline_width));
-            img.Add("Dark Agon Keys", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_agon_key.png"), Color.Black, outline_width));
-            img.Add("Dark Torvus Keys", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/dark_torvus_key.png"), Color.Black, outline_width));
-            img.Add("Ing Hive Keys", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/ing_hive_key.png"), Color.Black, outline_width));
-            img.Add("Sky Temple Keys", ImageUtils.MakeOutline(Image.FromFile(@"img/echoes/sky_temple_key.png"), Color.Black, outline_width));
+            var EchoesImagesPath = Path.Combine(Program.ExecutableDir, "img", "echoes");
+            img.Add("Energy Tanks", Image.FromFile(Path.Combine(EchoesImagesPath, "energy_tank.png")));
+            img.Add("Missiles", Image.FromFile(Path.Combine(EchoesImagesPath, "missile_launcher.png")));
+            img.Add("Seeker Launcher", Image.FromFile(Path.Combine(EchoesImagesPath, "seeker_launcher.png")));
+            img.Add("Morph Ball", Image.FromFile(Path.Combine(EchoesImagesPath, "morph_ball.png")));
+            img.Add("Morph Ball Bombs", Image.FromFile(Path.Combine(EchoesImagesPath, "morph_ball_bomb.png")));
+            img.Add("Power Bombs", Image.FromFile(Path.Combine(EchoesImagesPath, "power_bomb.png")));
+            img.Add("Boost Ball", Image.FromFile(Path.Combine(EchoesImagesPath, "boost_ball.png")));
+            img.Add("Spider Ball", Image.FromFile(Path.Combine(EchoesImagesPath, "spider_ball.png")));
+            img.Add("Space Jump Boots", Image.FromFile(Path.Combine(EchoesImagesPath, "space_jump_boots.png")));
+            img.Add("Screw Attack", Image.FromFile(Path.Combine(EchoesImagesPath, "screw_attack.png")));
+            img.Add("Dark Suit", Image.FromFile(Path.Combine(EchoesImagesPath, "dark_suit.png")));
+            img.Add("Light Suit", Image.FromFile(Path.Combine(EchoesImagesPath, "light_suit.png")));
+            img.Add("Gravity Boost", Image.FromFile(Path.Combine(EchoesImagesPath, "gravity_boost.png")));
+            img.Add("Power Beam", Image.FromFile(Path.Combine(EchoesImagesPath, "power_beam.png")));
+            img.Add("Dark Beam", Image.FromFile(Path.Combine(EchoesImagesPath, "dark_beam.png")));
+            img.Add("Light Beam", Image.FromFile(Path.Combine(EchoesImagesPath, "light_beam.png")));
+            img.Add("Annihilator Beam", Image.FromFile(Path.Combine(EchoesImagesPath, "annihilator_beam.png")));
+            img.Add("Charge Beam", Image.FromFile(Path.Combine(EchoesImagesPath, "charge_beam.png")));
+            img.Add("Grapple Beam", Image.FromFile(Path.Combine(EchoesImagesPath, "grapple_beam.png")));
+            img.Add("Super Missile", Image.FromFile(Path.Combine(EchoesImagesPath, "super_missile.png")));
+            img.Add("Darkburst", Image.FromFile(Path.Combine(EchoesImagesPath, "darkburst.png")));
+            img.Add("Sunburst", Image.FromFile(Path.Combine(EchoesImagesPath, "sunburst.png")));
+            img.Add("Sonic Boom", Image.FromFile(Path.Combine(EchoesImagesPath, "sonic_boom.png")));
+            img.Add("Scan Visor", Image.FromFile(Path.Combine(EchoesImagesPath, "scan_visor.png")));
+            img.Add("Dark Visor", Image.FromFile(Path.Combine(EchoesImagesPath, "dark_visor.png")));
+            img.Add("Echo Visor", Image.FromFile(Path.Combine(EchoesImagesPath, "echo_visor.png")));
+            img.Add("Dark Ammo Expansion", Image.FromFile(Path.Combine(EchoesImagesPath, "dark_ammo_expansion.png")));
+            img.Add("Light Ammo Expansion", Image.FromFile(Path.Combine(EchoesImagesPath, "light_ammo_expansion.png")));
+            img.Add("Double Damage", Image.FromFile(Path.Combine(EchoesImagesPath, "double_damage.png")));
+            img.Add("Cannon Ball", Image.FromFile(Path.Combine(EchoesImagesPath, "cannon_ball.png")));
+            img.Add("Energy Transfer Module", Image.FromFile(Path.Combine(EchoesImagesPath, "energy_transfer_module.png")));
+            img.Add("Violet Translator", Image.FromFile(Path.Combine(EchoesImagesPath, "violet_translator.png")));
+            img.Add("Amber Translator", Image.FromFile(Path.Combine(EchoesImagesPath, "amber_translator.png")));
+            img.Add("Emerald Translator", Image.FromFile(Path.Combine(EchoesImagesPath, "emerald_translator.png")));
+            img.Add("Cobalt Translator", Image.FromFile(Path.Combine(EchoesImagesPath, "cobalt_translator.png")));
+            img.Add("Dark Agon Keys", Image.FromFile(Path.Combine(EchoesImagesPath, "dark_agon_key.png")));
+            img.Add("Dark Torvus Keys", Image.FromFile(Path.Combine(EchoesImagesPath, "dark_torvus_key.png")));
+            img.Add("Ing Hive Keys", Image.FromFile(Path.Combine(EchoesImagesPath, "ing_hive_key.png")));
+            img.Add("Sky Temple Keys", Image.FromFile(Path.Combine(EchoesImagesPath, "sky_temple_key.png")));
+
+            foreach (string key in img.Keys)
+                img[key] = ImageUtils.MakeOutline(img[key], Color.Black, outline_width);
         }
 
         public override long IGT()

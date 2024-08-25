@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Configurations>Debug_Windows;Release_Windows;Debug_Linux;Release_Linux</Configurations>
     <Version>2.9.1</Version>
+	<UseWindowsForms>true</UseWindowsForms>
     <PackageId>MPItemTracker</PackageId>
     <Authors>MPItemTracker</Authors>
     <Company>MPItemTracker</Company>
@@ -28,14 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="WindowsBase" />
+    <PackageReference Include="Dapplo.Windows.Input" Version="1.0.28" />
   </ItemGroup>
 
   <ItemGroup>
@@ -103,9 +97,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="img\corruption\nova_beam.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="img\corruption\ped_suit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="img\corruption\plasma_beam.png">

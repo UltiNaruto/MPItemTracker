@@ -1,4 +1,4 @@
-﻿using MPItemTracker2.Utils;
+using MPItemTracker2.Utils;
 using System;
 using System.ComponentModel;
 using System.Drawing;

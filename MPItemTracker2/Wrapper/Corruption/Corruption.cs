@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+using MPItemTracker2;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text.Json;
 using Utils;
 
 namespace Wrapper.Corruption
@@ -128,7 +129,6 @@ namespace Wrapper.Corruption
         protected virtual bool HaveXRayVisor { get; }
         protected virtual bool HaveSpaceJumpBoots { get; }
         protected virtual bool HaveHypermode { get; }
-        protected virtual bool HavePEDSuit { get; }
         protected virtual bool HaveHazardShield { get; }
         protected virtual bool EnergyCells(int index) { return false; }
 
@@ -138,43 +138,43 @@ namespace Wrapper.Corruption
 
         public Corruption()
         {
-            String CurDir = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
-            dynamic json = JObject.Parse(File.ReadAllText(CurDir + "corruption.json"));
-            try
-            {
-                missile_launcher_provided_ammo = json.missiles_provided_ammo;
-                missiles_per_expansion = json.missiles_per_expansion;
-            }
-            catch { }
+            dynamic json = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, "corruption.json")));
+            try {
+                missile_launcher_provided_ammo = json.GetProperty("missiles_provided_ammo").GetInt32();
+                missiles_per_expansion = json.GetProperty("missiles_per_expansion").GetInt32();
+            } catch { }
             int outline_width = 2;
-            img.Add("Energy Tanks", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/energy_tank.png"), Color.Black, outline_width));
-            img.Add("Ship Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/ship_missile.png"), Color.Black, outline_width));
-            img.Add("Ship Grapple Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/ship_grapple_beam.png"), Color.Black, outline_width));
-            img.Add("Morph Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/morph_ball.png"), Color.Black, outline_width));
-            img.Add("Morph Ball Bombs", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/morph_ball_bomb.png"), Color.Black, outline_width));
-            img.Add("Boost Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/boost_ball.png"), Color.Black, outline_width));
-            img.Add("Spider Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/spider_ball.png"), Color.Black, outline_width));
-            img.Add("Hyper Ball", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/hyper_ball.png"), Color.Black, outline_width));
-            img.Add("Space Jump Boots", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/space_jump_boots.png"), Color.Black, outline_width));
-            img.Add("Screw Attack", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/screw_attack.png"), Color.Black, outline_width));
-            img.Add("Hypermode", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/hypermode.png"), Color.Black, outline_width));
-            img.Add("PED Suit", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/ped_suit.png"), Color.Black, outline_width));
-            img.Add("Hazard Shield", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/hazard_shield.png"), Color.Black, outline_width));
-            img.Add("Plasma Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/plasma_beam.png"), Color.Black, outline_width));
-            img.Add("Nova Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/nova_beam.png"), Color.Black, outline_width));
-            img.Add("Charge Beam", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/charge_beam.png"), Color.Black, outline_width));
-            img.Add("Grapple Lasso", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/grapple_lasso.png"), Color.Black, outline_width));
-            img.Add("Grapple Swing", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/grapple_swing.png"), Color.Black, outline_width));
-            img.Add("Grapple Voltage", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/grapple_voltage.png"), Color.Black, outline_width));
-            img.Add("Hyper Grapple", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/hyper_grapple.png"), Color.Black, outline_width));
-            img.Add("Missiles", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/missile_launcher.png"), Color.Black, outline_width));
-            img.Add("Ice Missile", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/ice_missile.png"), Color.Black, outline_width));
-            img.Add("Seeker Launcher", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/seeker_launcher.png"), Color.Black, outline_width));
-            img.Add("Hyper Missile", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/hyper_missile.png"), Color.Black, outline_width));
-            img.Add("Scan Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/scan_visor.png"), Color.Black, outline_width));
-            img.Add("Command Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/command_visor.png"), Color.Black, outline_width));
-            img.Add("XRay Visor", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/xray_visor.png"), Color.Black, outline_width));
-            img.Add("Energy Cells", ImageUtils.MakeOutline(Image.FromFile(@"img/corruption/energy_cell.png"), Color.Black, outline_width));
+            var CorruptionImagesPath = Path.Combine(Program.ExecutableDir, "img", "corruption");
+            img.Add("Energy Tanks", Image.FromFile(Path.Combine(CorruptionImagesPath, "energy_tank.png")));
+            img.Add("Ship Missiles", Image.FromFile(Path.Combine(CorruptionImagesPath, "ship_missile.png")));
+            img.Add("Ship Grapple Beam", Image.FromFile(Path.Combine(CorruptionImagesPath, "ship_grapple_beam.png")));
+            img.Add("Morph Ball", Image.FromFile(Path.Combine(CorruptionImagesPath, "morph_ball.png")));
+            img.Add("Morph Ball Bombs", Image.FromFile(Path.Combine(CorruptionImagesPath, "morph_ball_bomb.png")));
+            img.Add("Boost Ball", Image.FromFile(Path.Combine(CorruptionImagesPath, "boost_ball.png")));
+            img.Add("Spider Ball", Image.FromFile(Path.Combine(CorruptionImagesPath, "spider_ball.png")));
+            img.Add("Hyper Ball", Image.FromFile(Path.Combine(CorruptionImagesPath, "hyper_ball.png")));
+            img.Add("Space Jump Boots", Image.FromFile(Path.Combine(CorruptionImagesPath, "space_jump_boots.png")));
+            img.Add("Screw Attack", Image.FromFile(Path.Combine(CorruptionImagesPath, "screw_attack.png")));
+            img.Add("Hypermode", Image.FromFile(Path.Combine(CorruptionImagesPath, "hypermode.png")));
+            img.Add("Hazard Shield", Image.FromFile(Path.Combine(CorruptionImagesPath, "hazard_shield.png")));
+            img.Add("Plasma Beam", Image.FromFile(Path.Combine(CorruptionImagesPath, "plasma_beam.png")));
+            img.Add("Nova Beam", Image.FromFile(Path.Combine(CorruptionImagesPath, "nova_beam.png")));
+            img.Add("Charge Beam", Image.FromFile(Path.Combine(CorruptionImagesPath, "charge_beam.png")));
+            img.Add("Grapple Lasso", Image.FromFile(Path.Combine(CorruptionImagesPath, "grapple_lasso.png")));
+            img.Add("Grapple Swing", Image.FromFile(Path.Combine(CorruptionImagesPath, "grapple_swing.png")));
+            img.Add("Grapple Voltage", Image.FromFile(Path.Combine(CorruptionImagesPath, "grapple_voltage.png")));
+            img.Add("Hyper Grapple", Image.FromFile(Path.Combine(CorruptionImagesPath, "hyper_grapple.png")));
+            img.Add("Missiles", Image.FromFile(Path.Combine(CorruptionImagesPath, "missile_launcher.png")));
+            img.Add("Ice Missile", Image.FromFile(Path.Combine(CorruptionImagesPath, "ice_missile.png")));
+            img.Add("Seeker Launcher", Image.FromFile(Path.Combine(CorruptionImagesPath, "seeker_launcher.png")));
+            img.Add("Hyper Missile", Image.FromFile(Path.Combine(CorruptionImagesPath, "hyper_missile.png")));
+            img.Add("Scan Visor", Image.FromFile(Path.Combine(CorruptionImagesPath, "scan_visor.png")));
+            img.Add("Command Visor", Image.FromFile(Path.Combine(CorruptionImagesPath, "command_visor.png")));
+            img.Add("XRay Visor", Image.FromFile(Path.Combine(CorruptionImagesPath, "xray_visor.png")));
+            img.Add("Energy Cells", Image.FromFile(Path.Combine(CorruptionImagesPath, "energy_cell.png")));
+
+            foreach (string key in img.Keys)
+                img[key] = ImageUtils.MakeOutline(img[key], Color.Black, outline_width);
         }
 
         public override long IGT()
@@ -219,8 +219,6 @@ namespace Wrapper.Corruption
                     return HaveScrewAttack;
                 case "Hypermode":
                     return HaveHypermode;
-                case "PED Suit":
-                    return HavePEDSuit;
                 case "Hazard Shield":
                     return HaveHazardShield;
                 case "Plasma Beam":
@@ -288,8 +286,6 @@ namespace Wrapper.Corruption
                     return HaveScrewAttack ? 1 : 0;
                 case "Hypermode":
                     return HaveHypermode ? 1 : 0;
-                case "PED Suit":
-                    return HavePEDSuit ? 1 : 0;
                 case "Hazard Shield":
                     return HaveHazardShield ? 1 : 0;
                 case "Plasma Beam":

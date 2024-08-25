@@ -1,13 +1,13 @@
-﻿using System;
-using System.Windows.Input;
+using Dapplo.Windows.Input.Enums;
+using System;
 
 namespace MPItemTracker2.Utils
 {
     class KeysUtils
     {
-        public static Key ConvertFromString(string keystr)
+        public static VirtualKeyCode ConvertFromString(string keystr)
         {
-            return (Key)Enum.Parse(typeof(Key), keystr);
+            return (VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), keystr);
         }
     }
 }
