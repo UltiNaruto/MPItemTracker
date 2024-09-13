@@ -342,6 +342,36 @@ namespace Wrapper
 
         internal static void UpdateTracker(Graphics g)
         {
+            if (MetroidPrime.GetType().BaseType == typeof(Prime.Prime))
+            {
+                if (MetroidPrime.GetBoolState("IsProgressiveBeamEnabled"))
+                {
+                    if (pickups_to_show.Contains("Charge Beam"))
+                    {
+                        var tmp = pickups_to_show.ToList();
+                        var beams = pickups_to_show.Select(p => p).Where(p => !p.StartsWith("Charge") && !p.StartsWith("Grapple") && p.EndsWith("Beam"));
+                        foreach (var beam in beams)
+                            tmp.Insert(tmp.IndexOf("Charge Beam"), $"Charge Beam ({beam})");
+                        tmp.Remove("Charge Beam");
+                        pickups_to_show = tmp.ToArray();
+                    }
+                }
+                else
+                {
+                    if (!pickups_to_show.Contains("Charge Beam"))
+                    {
+                        var beams = pickups_to_show.Select(p => p).Where(p => !p.StartsWith("Charge") && !p.StartsWith("Grapple") && p.EndsWith("Beam"));
+                        var tmp = pickups_to_show.ToList();
+                        tmp.Insert(tmp.IndexOf("Charge Beam (Power Beam)"), "Charge Beam");
+
+                        foreach (var beam in beams)
+                            tmp.Remove($"Charge Beam ({beam})");
+
+                        pickups_to_show = tmp.ToArray();
+                    }
+                }
+            }
+
             int i, start_index = pickups_to_show.Length / 2 - (1 - pickups_to_show.Length % 2);
             String IGT = "";
             Size windowSize = ImportsMgr.GetWindowSize(dolphin_window);

@@ -48,6 +48,7 @@ namespace Wrapper.Prime
         protected const long OFF_PHAZONSUIT_OBTAINED = 0xE4;
         protected const long OFF_ENERGYTANKS_OBTAINED = 0xEC;
         protected const long OFF_ENERGYREFILL_OBTAINED = 0xFC;
+        protected const long OFF_UNKNOWN_ITEM_2_OBTAINED = 0x104;
         protected const long OFF_WAVEBUSTER_OBTAINED = 0x10C;
         protected const long OFF_ARTIFACT_OF_TRUTH_OBTAINED = 0x114;
         protected const long OFF_ARTIFACT_OF_STRENGTH_OBTAINED = 0x11C;
@@ -88,23 +89,11 @@ namespace Wrapper.Prime
         protected virtual bool HaveWaveBeam { get; }
         protected virtual bool HavePlasmaBeam { get; }
 
-        protected bool HaveMissiles
-        {
-            get
-            {
-                return MaxMissiles > 0;
-            }
-        }
+        protected bool HaveMissiles => HaveMissileLauncher && MaxMissiles > 0;
 
         protected virtual bool HaveMorphBallBombs { get; }
 
-        protected bool HavePowerBombs
-        {
-            get
-            {
-                return MaxPowerBombs > 0;
-            }
-        }
+        protected bool HavePowerBombs => HavePowerBombLauncher && MaxPowerBombs > 0;
 
         protected virtual bool HaveFlamethrower { get; }
         protected virtual bool HaveScanVisor { get; }
@@ -123,6 +112,16 @@ namespace Wrapper.Prime
         protected virtual bool HavePhazonSuit { get; }
         protected virtual bool HaveWavebuster { get; }
         protected virtual bool Artifacts(int index) { return false; }
+        protected virtual bool HaveUnlimitedMissiles { get; }
+        protected virtual bool HaveUnlimitedPowerBombs { get; }
+        protected virtual bool HaveMissileLauncher { get; }
+        protected virtual bool HavePowerBombLauncher { get; }
+        protected virtual int ProgressivePowerBeam { get; }
+        protected virtual int ProgressiveWaveBeam { get; }
+        protected virtual int ProgressiveIceBeam { get; }
+        protected virtual int ProgressivePlasmaBeam { get; }
+        protected virtual bool IsProgressiveBeamEnabled { get; }
+        protected virtual bool IsCustomItemsPatchEnabled { get; }
 
         protected Dictionary<String, Image> img = new Dictionary<string, Image>();
         protected int missile_launcher_provided_ammo = 5;
@@ -153,6 +152,10 @@ namespace Wrapper.Prime
             img.Add("Ice Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "icebeam.png")));
             img.Add("Plasma Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "plasmabeam.png")));
             img.Add("Charge Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "chargebeam.png")));
+            img.Add("Charge Beam (Power Beam)", Image.FromFile(Path.Combine(PrimeImagesPath, "chargebeam_power.png")));
+            img.Add("Charge Beam (Wave Beam)", Image.FromFile(Path.Combine(PrimeImagesPath, "chargebeam_wave.png")));
+            img.Add("Charge Beam (Ice Beam)", Image.FromFile(Path.Combine(PrimeImagesPath, "chargebeam_ice.png")));
+            img.Add("Charge Beam (Plasma Beam)", Image.FromFile(Path.Combine(PrimeImagesPath, "chargebeam_plasma.png")));
             img.Add("Grapple Beam", Image.FromFile(Path.Combine(PrimeImagesPath, "grapplebeam.png")));
             img.Add("Super Missile", Image.FromFile(Path.Combine(PrimeImagesPath, "supermissile.png")));
             img.Add("Wavebuster", Image.FromFile(Path.Combine(PrimeImagesPath, "wavebuster.png")));
@@ -224,6 +227,14 @@ namespace Wrapper.Prime
                     return HavePlasmaBeam;
                 case "Charge Beam":
                     return HaveChargeBeam;
+                case "Charge Beam (Power Beam)":
+                    return ProgressivePowerBeam >= 2;
+                case "Charge Beam (Wave Beam)":
+                    return ProgressiveWaveBeam >= 2;
+                case "Charge Beam (Ice Beam)":
+                    return ProgressiveIceBeam >= 2;
+                case "Charge Beam (Plasma Beam)":
+                    return ProgressivePlasmaBeam >= 2;
                 case "Grapple Beam":
                     return HaveGrappleBeam;
                 case "Super Missile":
@@ -249,7 +260,13 @@ namespace Wrapper.Prime
                 case "Energy Tanks":
                     return MaxEnergyTanks;
                 case "Missiles":
-                    return (MaxMissiles - missile_launcher_provided_ammo) / missiles_per_expansion;
+                    if (HaveMissiles)
+                    {
+                        if (HaveUnlimitedMissiles)
+                            return -1;
+                        return (MaxMissiles - missile_launcher_provided_ammo) / missiles_per_expansion;
+                    }
+                    return 0;
                 case "Morph Ball":
                     return HaveMorphBall ? 1 : 0;
                 case "Morph Ball Bombs":
@@ -259,7 +276,13 @@ namespace Wrapper.Prime
                 case "Spider Ball":
                     return HaveSpiderBall ? 1 : 0;
                 case "Power Bombs":
-                    return MaxPowerBombs;
+                    if (HavePowerBombs)
+                    {
+                        if (HaveUnlimitedPowerBombs)
+                            return -1;
+                        return MaxPowerBombs;
+                    }
+                    return 0;
                 case "Space Jump Boots":
                     return HaveSpaceJumpBoots ? 1 : 0;
                 case "Varia Suit":
@@ -284,6 +307,14 @@ namespace Wrapper.Prime
                     return HavePlasmaBeam ? 1 : 0;
                 case "Charge Beam":
                     return HaveChargeBeam ? 1 : 0;
+                case "Charge Beam (Power Beam)":
+                    return ProgressivePowerBeam >= 2 ? 1 : 0;
+                case "Charge Beam (Wave Beam)":
+                    return ProgressiveWaveBeam >= 2 ? 1 : 0;
+                case "Charge Beam (Ice Beam)":
+                    return ProgressiveIceBeam >= 2 ? 1 : 0;
+                case "Charge Beam (Plasma Beam)":
+                    return ProgressivePlasmaBeam >= 2 ? 1 : 0;
                 case "Grapple Beam":
                     return HaveGrappleBeam ? 1 : 0;
                 case "Super Missile":
@@ -302,6 +333,31 @@ namespace Wrapper.Prime
                 default:
                     return 0;
             }
+        }
+
+        public override int GetIntState(string state)
+        {
+            throw new Exception($"Prime does not have {state} state!");
+        }
+
+        public override bool GetBoolState(string state)
+        {
+            if (state == "IsProgressiveBeamEnabled")
+            {
+                return IsProgressiveBeamEnabled;
+            }
+
+            throw new Exception($"Prime does not have {state} state!");
+        }
+
+        public override void SetIntState(string state, int value)
+        {
+            throw new Exception($"Prime does not have {state} state!");
+        }
+
+        public override void SetBoolState(string state, bool value)
+        {
+            throw new Exception($"Prime does not have {state} state!");
         }
 
         public override Image GetIcon(string pickup)

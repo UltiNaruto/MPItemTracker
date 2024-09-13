@@ -258,6 +258,18 @@
     <None Update="img\prime\chargebeam.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="img\prime\chargebeam_ice.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="img\prime\chargebeam_plasma.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="img\prime\chargebeam_power.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="img\prime\chargebeam_wave.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="img\prime\energytank.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

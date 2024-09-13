@@ -4,6 +4,8 @@ namespace Wrapper.Prime
 {
     public class MPT_MP1_PAL : Prime
     {
+        protected const long OFF_CPLAYERSTATE_GETITEMAMOUNT = 0x801A0DA8;
+        protected const long OFF_CPLAYERSTATE_POWERUPS_MAXCAPACITY = 0x804780A0;
         protected const long OFF_CGAMEGLOBALOBJECTS = 0x804E2BD0;
         protected const long OFF_CGAMESTATE = OFF_CGAMEGLOBALOBJECTS + 0x134;
         protected const long OFF_CSTATEMANAGER = 0x804C335C;
@@ -349,5 +351,118 @@ namespace Wrapper.Prime
                     throw new Exception("There are no artifacts past the 12th artifact");
             }
         }
+
+        protected override bool HaveUnlimitedMissiles
+        {
+            get
+            {
+                if (!IsCustomItemsPatchEnabled)
+                    return false;
+                if (CPlayerState == 0)
+                    return false;
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 1)) == (1 << 1);
+            }
+        }
+
+        protected override bool HaveUnlimitedPowerBombs
+        {
+            get
+            {
+                if (!IsCustomItemsPatchEnabled)
+                    return false;
+                if (CPlayerState == 0)
+                    return false;
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 2)) == (1 << 2);
+            }
+        }
+
+        protected override bool HaveMissileLauncher
+        {
+            get
+            {
+                if (!IsCustomItemsPatchEnabled)
+                    return true;
+                if (CPlayerState == 0)
+                    return false;
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 2)) == (1 << 2);
+            }
+        }
+
+        protected override bool HavePowerBombLauncher
+        {
+            get
+            {
+                if (!IsCustomItemsPatchEnabled)
+                    return true;
+                if (CPlayerState == 0)
+                    return false;
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 3)) == (1 << 3);
+            }
+        }
+
+        protected override int ProgressivePowerBeam
+        {
+            get
+            {
+                var result = 0;
+                if (CPlayerState == 0)
+                    return result;
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_POWERBEAM_OBTAINED);
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_SUPERMISSILE_OBTAINED);
+                return result;
+            }
+        }
+
+        protected override int ProgressiveWaveBeam
+        {
+            get
+            {
+                var result = 0;
+                if (CPlayerState == 0)
+                    return result;
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_WAVEBEAM_OBTAINED);
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_WAVEBUSTER_OBTAINED);
+                return result;
+            }
+        }
+
+        protected override int ProgressiveIceBeam
+        {
+            get
+            {
+                var result = 0;
+                if (CPlayerState == 0)
+                    return result;
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_ICEBEAM_OBTAINED);
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_ICESPREADER_OBTAINED);
+                return result;
+            }
+        }
+
+        protected override int ProgressivePlasmaBeam
+        {
+            get
+            {
+                var result = 0;
+                if (CPlayerState == 0)
+                    return result;
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_PLASMABEAM_OBTAINED);
+                result += GCMem.ReadInt32(CPlayerState + 4 + OFF_FLAMETHROWER_OBTAINED);
+                return result;
+            }
+        }
+
+        protected override bool IsProgressiveBeamEnabled
+        {
+            get
+            {
+                for (var i = 0; i < 4; i++)
+                    if (GCMem.ReadInt32(OFF_CPLAYERSTATE_POWERUPS_MAXCAPACITY + i * 4) != 2)
+                        return false;
+                return true;
+            }
+        }
+
+        protected override bool IsCustomItemsPatchEnabled => GCMem.ReadUInt32(OFF_CPLAYERSTATE_GETITEMAMOUNT) != 0x2c040028;
     }
 }
