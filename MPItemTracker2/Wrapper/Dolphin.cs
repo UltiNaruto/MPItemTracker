@@ -86,15 +86,15 @@ namespace Wrapper
 
         internal static bool Init()
         {
-            String window_title = "";
-#if WINDOWS
-            dolphin = Process.GetProcessesByName("dolphin").FirstOrDefault();
-#elif LINUX
-            List<IntPtr> childWindows = new List<IntPtr>();
-            dolphin = Process.GetProcessesByName("dolphin-emu").FirstOrDefault();
-#endif
-            if (dolphin == null)
-                dolphin = Process.GetProcessesByName("MPR").FirstOrDefault();
+            String[] PROCESSES_TO_CHECK = new String[] { "dolphin", "dolphin-emu", "MPR" };
+            String window_title = String.Empty;
+
+            foreach (var process in PROCESSES_TO_CHECK)
+            {
+                dolphin = Process.GetProcessesByName(process).FirstOrDefault();
+                if (dolphin != null)
+                    break;
+            }
 
             if (dolphin == null)
                 return false;
@@ -108,6 +108,7 @@ namespace Wrapper
             if (window_title.Count((c) => c == '|') >= 4 && window_title.Count((c) => c == '|') <= 5)
                 return true;
 #if LINUX
+            List<IntPtr> childWindows = new List<IntPtr>();
             if (ImportsMgr.FindChildWindows(dolphin_window, ref childWindows).Length > 0)
             {
                 foreach (var childWindow in childWindows)
