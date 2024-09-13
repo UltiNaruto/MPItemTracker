@@ -1,6 +1,3 @@
-using Dapplo.Windows.Input.Enums;
-using Dapplo.Windows.Input.Keyboard;
-using Dapplo.Windows.Messages;
 using Imports;
 using MPItemTracker2;
 using MPItemTracker2.Utils;
@@ -15,6 +12,8 @@ using System.Threading;
 using System.Text;
 using System.Windows.Forms;
 using System.Text.Json;
+using WindowsInput.Native;
+using WindowsInput;
 
 namespace Wrapper
 {
@@ -32,8 +31,9 @@ namespace Wrapper
         static bool Is32BitProcess = false;
         static Metroid MetroidPrime = null;
         static String[] pickups_to_show = null;
-        static KeyCombinationHandler refresh_config_key = null;
+        static VirtualKeyCode refresh_config_key = default;
         static IGTDisplayType igt_display_type = IGTDisplayType.None;
+        static InputSimulator inputSimulator = new InputSimulator();
 
         internal static bool IsRunning
         {
@@ -129,7 +129,7 @@ namespace Wrapper
             String game_config_filename = String.Empty;
             dynamic config = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, "config.json")));
             try {
-                refresh_config_key = new KeyCombinationHandler(KeysUtils.ConvertFromString(config.GetProperty("refresh_config_key").GetString()));
+                refresh_config_key = KeysUtils.ConvertFromString(config.GetProperty("refresh_config_key").GetString());
                 igt_display_type = (IGTDisplayType)Enum.Parse(typeof(IGTDisplayType), config.GetProperty("igt_display_type").GetString());
                 if (MetroidPrime != null)
                 {
@@ -159,7 +159,7 @@ namespace Wrapper
                     }
                 }
             } catch {
-                refresh_config_key = new KeyCombinationHandler(VirtualKeyCode.F5);
+                refresh_config_key = VirtualKeyCode.F5;
                 igt_display_type = IGTDisplayType.WithoutMS;
                 pickups_to_show = null;
             }
@@ -446,10 +446,8 @@ namespace Wrapper
             FormUtils.SetWindowPosition(new Point(0, 0));
             FormUtils.SetWindowSize(ImportsMgr.GetWindowSize(dolphin_window));
 
-            new Thread(() =>
-            {
-                using (KeyboardHook.KeyboardEvents.Where(refresh_config_key).Subscribe(e => LoadConfig())) { MessageLoop.ProcessMessages(); }
-            }).Start();
+            if (inputSimulator.InputDeviceState.IsKeyDown(refresh_config_key))
+                LoadConfig();
 
             MetroidPrime.Update();
         }

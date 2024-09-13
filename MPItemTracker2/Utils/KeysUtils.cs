@@ -1,5 +1,5 @@
-using Dapplo.Windows.Input.Enums;
 using System;
+using WindowsInput.Native;
 
 namespace MPItemTracker2.Utils
 {

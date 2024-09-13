@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapplo.Windows.Input" Version="1.0.28" />
+    <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>
