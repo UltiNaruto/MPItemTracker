@@ -6,7 +6,6 @@ using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
-using System.Threading;
 
 namespace Imports
 {
@@ -329,6 +328,9 @@ namespace Imports
             Process proc = Process.GetProcessById(id);
             if (proc == null)
                 return IntPtr.Zero;
+
+            if (proc.MainWindowHandle == IntPtr.Zero)
+                proc.Refresh();
             return proc.MainWindowHandle;
 #else
             throw new NotImplementedException();
