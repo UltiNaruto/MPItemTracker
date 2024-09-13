@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Text.Json;
 using WindowsInput.Native;
 using WindowsInput;
+using System.Collections.Generic;
 
 namespace Wrapper
 {
@@ -127,41 +128,37 @@ namespace Wrapper
         internal static void LoadConfig()
         {
             int i;
+            String config_path = Path.Combine(Program.ExecutableDir, "config.json");
             String game_config_filename = String.Empty;
-            dynamic config = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, "config.json")));
             try {
+                dynamic config = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(config_path));
                 refresh_config_key = KeysUtils.ConvertFromString(config.GetProperty("refresh_config_key").GetString());
                 igt_display_type = (IGTDisplayType)Enum.Parse(typeof(IGTDisplayType), config.GetProperty("igt_display_type").GetString());
-                if (MetroidPrime != null)
-                {
-                    if (MetroidPrime.GetType().BaseType == typeof(Prime.Prime))
-                    {
-                        game_config_filename = "prime.json";
-                    }
-                    if (MetroidPrime.GetType().BaseType == typeof(Echoes.Echoes))
-                    {
-                        game_config_filename = "echoes.json";
-                    }
-                    if (MetroidPrime.GetType().BaseType == typeof(Corruption.Corruption))
-                    {
-                        game_config_filename = "corruption.json";
-                    }
-                    if (game_config_filename != String.Empty)
-                    {
-                        dynamic game_config = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(Path.Combine(Program.ExecutableDir, game_config_filename)));
-                        try {
-                            var pickups = game_config.GetProperty("pickups");
-                            pickups_to_show = new String[pickups.GetArrayLength()];
-                            for (i = 0; i < pickups_to_show.Length; i++)
-                                pickups_to_show[i] = pickups[i].GetString();
-                        } catch {
-                            pickups_to_show = null;
-                        }
-                    }
-                }
             } catch {
                 refresh_config_key = VirtualKeyCode.F5;
                 igt_display_type = IGTDisplayType.WithoutMS;
+                File.WriteAllText(JsonSerializer.Serialize<dynamic>(new Dictionary<string, string>()
+                {
+                    { "_comment", "For keys name, please refer to this : https://github.com/cwevers/InputSimulatorCore/blob/master/WindowsInput/Native/VirtualKeyCode.cs" },
+                    { "refresh_config_key", Enum.GetName(typeof(VirtualKeyCode), refresh_config_key) },
+                    { "igt_display_type", Enum.GetName(typeof(IGTDisplayType), igt_display_type) }
+                }, new JsonSerializerOptions() { WriteIndented = true }), config_path);
+            }
+
+            try {
+                if (MetroidPrime != null)
+                {
+                    game_config_filename = Path.Combine(Program.ExecutableDir, $"{MetroidPrime.GetType().BaseType.Name.ToLower()}.json");
+                    if (File.Exists(game_config_filename))
+                    {
+                        dynamic game_config = JsonSerializer.Deserialize<dynamic>(File.ReadAllText(game_config_filename));
+                        var pickups = game_config.GetProperty("pickups");
+                        pickups_to_show = new String[pickups.GetArrayLength()];
+                        for (i = 0; i < pickups_to_show.Length; i++)
+                            pickups_to_show[i] = pickups[i].GetString();
+                    }
+                }
+            } catch {
                 pickups_to_show = null;
             }
         }
