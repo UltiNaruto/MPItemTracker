@@ -23,7 +23,7 @@ namespace MPItemTracker2.Forms
             Directory.SetCurrentDirectory(Path.GetDirectoryName(Application.ExecutablePath));
             FormUtils.Init(this);
             InitializeComponent();
-            this.Text += $" v{version.Major}.{version.Minor}";
+            this.Text += $" v{version.Major}.{version.Minor}.{version.Build}";
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
