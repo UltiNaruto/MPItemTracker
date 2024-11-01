@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Configurations>Debug_Windows;Release_Windows;Debug_Linux;Release_Linux</Configurations>
-    <Version>2.10.0</Version>
+    <Version>2.10.1</Version>
 	<UseWindowsForms>true</UseWindowsForms>
     <PackageId>MPItemTracker</PackageId>
     <Authors>MPItemTracker</Authors>

@@ -185,6 +185,25 @@ namespace Wrapper.Prime
             return _IsSwitchingState;
         }
 
+        protected int Unk2ToCustomItem(string pickup)
+        {
+            switch(pickup)
+            {
+                case "Unlimited Missiles":
+                    return (1 << 0);
+                case "Unlimited Power Bombs":
+                    return (1 << 1);
+                case "Missile Launcher":
+                    return (1 << 2);
+                case "Power Bomb Launcher":
+                    return (1 << 3);
+                case "Spring Ball":
+                    return (1 << 4);
+                default:
+                    throw new Exception($"{pickup} is not a custom item");
+            }
+        }
+
         public override bool HasPickup(string pickup)
         {
             switch(pickup)

@@ -360,7 +360,8 @@ namespace Wrapper.Prime
                     return false;
                 if (CPlayerState == 0)
                     return false;
-                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 1)) == (1 << 1);
+                var value = Unk2ToCustomItem("Unlimited Missiles");
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & value) == value;
             }
         }
 
@@ -372,19 +373,8 @@ namespace Wrapper.Prime
                     return false;
                 if (CPlayerState == 0)
                     return false;
-                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 2)) == (1 << 2);
-            }
-        }
-
-        protected override bool HaveMissileLauncher
-        {
-            get
-            {
-                if (!IsCustomItemsPatchEnabled)
-                    return true;
-                if (CPlayerState == 0)
-                    return false;
-                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 2)) == (1 << 2);
+                var value = Unk2ToCustomItem("Unlimited Power Bombs");
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & value) == value;
             }
         }
 
@@ -396,7 +386,21 @@ namespace Wrapper.Prime
                     return true;
                 if (CPlayerState == 0)
                     return false;
-                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & (1 << 3)) == (1 << 3);
+                var value = Unk2ToCustomItem("Power Bomb Launcher");
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & value) == value;
+            }
+        }
+
+        protected override bool HaveMissileLauncher
+        {
+            get
+            {
+                if (!IsCustomItemsPatchEnabled)
+                    return true;
+                if (CPlayerState == 0)
+                    return false;
+                var value = Unk2ToCustomItem("Missile Launcher");
+                return (GCMem.ReadInt32(CPlayerState + 4 + OFF_UNKNOWN_ITEM_2_OBTAINED) & value) == value;
             }
         }
 
