@@ -306,7 +306,7 @@ namespace Wrapper.Echoes
                 case "Light Suit":
                     return HaveLightSuit;
                 case "Progressive Suit":
-                    return HaveDarkBeam || HaveLightSuit;
+                    return HaveDarkSuit || HaveLightSuit;
                 case "Gravity Boost":
                     return HaveGravityBoost;
                 case "Scan Visor":
