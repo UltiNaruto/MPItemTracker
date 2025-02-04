@@ -467,6 +467,6 @@ namespace Wrapper.Prime
             }
         }
 
-        protected override bool IsCustomItemsPatchEnabled => GCMem.ReadUInt32(OFF_CPLAYERSTATE_GETITEMAMOUNT) != 0x2c040028;
+        protected override bool IsCustomItemsPatchEnabled => GCMem.ReadUInt32(OFF_CPLAYERSTATE_GETITEMAMOUNT) != 0x28040028;
     }
 }
